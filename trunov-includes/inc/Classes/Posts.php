@@ -325,18 +325,13 @@ class Posts
 
         foreach ($posts as $post) {
 
-            $wpdb->insert(
-                $wpdb->posts,
-                ['ID' => $post->id]
-            );
-
             $data = [
-                'ID'           => $post->id,
+                'import_id'    => $post->id,
                 'post_title'   => sanitize_text_field($post->name),
                 'post_content' => $post->text,
                 'post_date'    => $post->date . ' ' . current_time('H:i:s'),
-                'post_name'    => $post->id,
                 'post_author'  => 1,
+                'post_name'    => $post->id,
                 'post_status'  => ($post->active == 1) ? "publish" : "pending",
                 'post_type'    => 'services-catalog'
             ];
@@ -358,24 +353,30 @@ class Posts
                 wp_die($message, '', $args);
             }
 
-            if ($inserted) {
+            // При импорте не понятно почему в конце `post_name` проставлялась цифра 2 (`post_name-2`)
+            // Проставлялась почему-то только при использовании числового `post_name`
+            // Получилось вылечить только обновлением данных поста после импорта
+            $wpdb->update(
+                $wpdb->posts,
+                ['post_name' => $inserted],
+                ['ID' => $inserted]
+            );
 
-                if ($post->parent_id == '16790') {
+            if ($post->parent_id == '16790') {
 
-                    $tax_slug = 'services_catalog_categories';
+                $tax_slug = 'services_catalog_categories';
 
-                    $term = get_term_by('name', 'Физическим лицам', $tax_slug);
+                $term = get_term_by('name', 'Физическим лицам', $tax_slug);
 
-                    $term_id = $term->term_id;
+                $term_id = $term->term_id;
 
-                    wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
-                } else {
+                wp_set_post_terms($inserted, [$term_id], $tax_slug, false);
+            } else {
 
-                    $term_id = null;
-                }
-
-                self::get_services_catalog_children($inserted, $term_id);
+                $term_id = null;
             }
+
+            self::get_services_catalog_children($inserted, $term_id);
         }
     }
 
@@ -403,13 +404,8 @@ class Posts
 
             foreach ($posts as $post) {
 
-                $wpdb->insert(
-                    $wpdb->posts,
-                    ['ID' => $post->id]
-                );
-
                 $data = [
-                    'ID'           => $post->id,
+                    'import_id'    => $post->id,
                     'post_title'   => sanitize_text_field($post->name),
                     'post_content' => $post->text,
                     'post_date'    => $post->date . ' ' . current_time('H:i:s'),
@@ -437,17 +433,23 @@ class Posts
                     wp_die($message, '', $args);
                 }
 
-                if ($child_inserted) {
+                // При импорте не понятно почему в конце `post_name` проставлялась цифра 2 (`post_name-2`)
+                // Проставлялась почему-то только при использовании числового `post_name`
+                // Получилось вылечить только обновлением данных поста после импорта
+                $wpdb->update(
+                    $wpdb->posts,
+                    ['post_name' => $child_inserted],
+                    ['ID' => $child_inserted]
+                );
 
-                    if (!is_null($term_id)) {
+                if (!is_null($term_id)) {
 
-                        $tax_slug = 'services_catalog_categories';
+                    $tax_slug = 'services_catalog_categories';
 
-                        wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
-                    }
-
-                    self::get_services_catalog_children($child_inserted, $term_id);
+                    wp_set_post_terms($child_inserted, [$term_id], $tax_slug, false);
                 }
+
+                self::get_services_catalog_children($child_inserted, $term_id);
             }
         }
     }

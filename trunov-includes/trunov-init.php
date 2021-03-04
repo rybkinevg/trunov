@@ -29,12 +29,11 @@ require(dirname(__FILE__) . '/inc/Classes/Images.php');
 require(dirname(__FILE__) . '/inc/Classes/Taxonomy.php');
 require(dirname(__FILE__) . '/inc/Classes/Topics.php');
 
-require(dirname(__FILE__) . '/inc/rename-post-type-post.php');
 require(dirname(__FILE__) . '/inc/post-type-post.php');
 require(dirname(__FILE__) . '/inc/post-type-lawyers.php');
 require(dirname(__FILE__) . '/inc/post-type-services-catalog.php');
 require(dirname(__FILE__) . '/inc/settings-page.php');
-// require(dirname(__FILE__) . '/inc/disable-gutenberg.php');
+require(dirname(__FILE__) . '/inc/disable-gutenberg.php');
 
 use rybkinevg\trunov\{Cats, Tags, Posts, Images, Taxonomy, Topics};
 

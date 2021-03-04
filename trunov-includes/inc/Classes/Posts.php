@@ -4,6 +4,30 @@ namespace rybkinevg\trunov;
 
 class Posts
 {
+    protected static function check_date($date)
+    {
+        if ($date == '0000-00-00') {
+
+            return current_time('Y-m-d H:i:s');
+        }
+
+        return $date . ' ' . current_time('H:i:s');
+    }
+
+    protected static function show_error($obj, $message = null)
+    {
+        if (is_null($message))
+            $message = "<p>Текст ошибки: {$obj->get_error_message()}</p>";
+        else
+            $message .= "<p>Текст ошибки: {$obj->get_error_message()}</p>";
+
+        $args = [
+            'back_link' => true
+        ];
+
+        wp_die($message, 'Ошибка!', $args);
+    }
+
     /**
      * Получение массива новостей из исходной таблицы данных
      *
@@ -166,6 +190,73 @@ class Posts
         }
     }
 
+    public static function get_posts()
+    {
+        global $wpdb;
+
+        // $count_query = "
+        // SELECT
+        //     COUNT(*)
+        // FROM
+        //     `aleksnet_document`
+        // WHERE
+        //     `parent_id` = '114'
+        // OR
+        //     `parent_id` = '115'
+        // OR
+        //     `parent_id` = '14820'
+        // ";
+
+        // $count = $wpdb->get_var($count_query);
+
+        $query = "
+        SELECT
+            `id`,
+            `name`,
+            `text`,
+            `date`,
+            `active`,
+            `parent_id`
+        FROM
+            `aleksnet_document`
+        WHERE
+            `parent_id` = '114'
+        OR
+            `parent_id` = '115'
+        OR
+            `parent_id` = '14820'
+        ORDER BY
+            `id`
+        ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_content' => $post->text,
+                'post_date'    => self::check_date($post->date),
+                'post_name'    => $post->id,
+                'post_author'  => 1,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending"
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted))
+                self::show_error($inserted);
+
+            if ($post->parent_id == '115')
+                $cat_id = get_cat_ID('Новости');
+            else
+                $cat_id = get_cat_ID('Новости СМИ');
+
+            wp_set_post_categories($wpdb->insert_id, $cat_id);
+        }
+    }
+
     public static function get_lawyers(): int
     {
         global $wpdb;
@@ -213,7 +304,7 @@ class Posts
                 'ID'           => $post->id,
                 'post_title'   => sanitize_text_field($post->name),
                 'post_content' => $post->text,
-                'post_date'    => $post->date . ' ' . current_time('H:i:s'),
+                'post_date'    => self::check_date($post->date),
                 'post_name'    => $post->id,
                 'post_author'  => 1,
                 'post_status'  => ($post->active == 1) ? "publish" : "pending",
@@ -329,7 +420,7 @@ class Posts
                 'import_id'    => $post->id,
                 'post_title'   => sanitize_text_field($post->name),
                 'post_content' => $post->text,
-                'post_date'    => $post->date . ' ' . current_time('H:i:s'),
+                'post_date'    => self::check_date($post->date),
                 'post_author'  => 1,
                 'post_name'    => $post->id,
                 'post_status'  => ($post->active == 1) ? "publish" : "pending",
@@ -408,7 +499,7 @@ class Posts
                     'import_id'    => $post->id,
                     'post_title'   => sanitize_text_field($post->name),
                     'post_content' => $post->text,
-                    'post_date'    => $post->date . ' ' . current_time('H:i:s'),
+                    'post_date'    => self::check_date($post->date),
                     'post_name'    => $post->id,
                     'post_author'  => 1,
                     'post_status'  => ($post->active == 1) ? "publish" : "pending",

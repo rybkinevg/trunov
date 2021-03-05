@@ -24,7 +24,6 @@ function add_my_setting()
                 margin-top: 40px;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: repeat(3, auto);
                 gap: 40px;
             }
 
@@ -33,11 +32,26 @@ function add_my_setting()
                 flex-direction: column;
                 padding: 25px;
                 box-shadow: 0 0 1px #1e1e1e;
+                background-color: #fff;
+            }
+
+            .item form {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .item__body {
+                flex: 1 1 auto;
+                margin: 20px 0;
+            }
+
+            .item__btn {
+                text-align: right;
             }
 
             .item h2 {
-                flex: 1 1 auto;
-                margin-top: 0;
+                margin: 0;
             }
 
             .item p {
@@ -45,56 +59,80 @@ function add_my_setting()
             }
         </style>
 
-        <div class="container">
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="get_posts" />
-                    <h2 class="item__title">Импорт постов</h2>
-                    <div class="item__body"></div>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Импортировать в базу</button>
-                    </div>
-                </form>
+        <div class="block">
+            <h2>Новости</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_posts" />
+                        <h2 class="item__title">Импорт постов</h2>
+                        <div class="item__body">
+                            <p>Импорт разделен на 3 части, так как очень большой объём данных, после первого импорта нужно импортировать ещё 2 раза.</p>
+                            <p>Статус импорта - <?= get_option('trunov_imported_posts', 0); ?> из 3</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="set_taxonomies" />
+                        <h2 class="item__title">Заполнение таксономий</h2>
+                        <div class="item__body">
+                            <p>Заполнение таксономий: СМИ, Услуги, Телеперадачи и прочих, данными</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Заполнить таксономии</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="set_post_tax" />
+                        <h2 class="item__title">Проставить таксономии постам</h2>
+                        <div class="item__body">
+                            <p>Привязать таксономии к постам.</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Проставить таксономии</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="set_taxonomies" />
-                    <h2 class="item__title">Заполнение таксономий</h2>
-                    <div class="item__body"></div>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Заполнить таксономии</button>
-                    </div>
-                </form>
+        </div>
+        <div class="block">
+            <h2>Адвокаты</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_lawyers" />
+                        <h2 class="item__title">Импортировать адвокатов</h2>
+                        <div class="item__body">
+                            <p>Импортировать адвокатов и юристов, проставить категории и представительства, скачать и привязать миниатюры.</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="set_post_tax" />
-                    <h2 class="item__title">Проставить таксономии постам</h2>
-                    <div class="item__body"></div>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Проставить таксономии</button>
-                    </div>
-                </form>
-            </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="get_lawyers" />
-                    <h2 class="item__title">Импортировать адвокатов</h2>
-                    <div class="item__body"></div>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Импортировать в базу</button>
-                    </div>
-                </form>
-            </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="get_services_catalog" />
-                    <h2 class="item__title">Импортировать услуги</h2>
-                    <div class="item__body"></div>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Импортировать в базу</button>
-                    </div>
-                </form>
+        </div>
+        <div class="block">
+            <h2>Услуги</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_services_catalog" />
+                        <h2 class="item__title">Импортировать услуги</h2>
+                        <div class="item__body">
+                            <p>Импортировать все услуги с их дочерними страницами и проставить категории.</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -109,52 +147,6 @@ add_action('admin_action_get_posts', 'get_posts_admin_action');
 
 function get_posts_admin_action()
 {
-    // $types = [
-    //     'Новости'     => 115,
-    //     'Новости СМИ' => 114,
-    //     'Анонсы'      => 14820
-    // ];
-
-    // $cats = [
-    //     'Новости' => [
-    //         'ID'       => 1,
-    //         'Название' => 'Новости',
-    //         'Описание' => 'Категория обычных новостей сайта',
-    //         'Слаг'     => 'news'
-    //     ],
-    //     'Новости СМИ' => [
-    //         'ID'       => 0,
-    //         'Название' => 'Новости СМИ',
-    //         'Описание' => 'Категория новостей в СМИ',
-    //         'Слаг'     => 'news_smi'
-    //     ]
-    // ];
-
-    // foreach ($types as $key => $value) {
-
-    //     $posts = Posts::get($value);
-
-    //     if ($key == 'Новости') {
-
-    //         $cat = Cats::create_cat(
-    //             $cats['Новости']['ID'],
-    //             $cats['Новости']['Название'],
-    //             $cats['Новости']['Описание'],
-    //             $cats['Новости']['Слаг']
-    //         );
-    //     } else {
-
-    //         $cat = Cats::create_cat(
-    //             $cats['Новости СМИ']['ID'],
-    //             $cats['Новости СМИ']['Название'],
-    //             $cats['Новости СМИ']['Описание'],
-    //             $cats['Новости СМИ']['Слаг']
-    //         );
-    //     }
-
-    //     Posts::insert($posts, $cat);
-    // }
-
     Posts::get_posts();
 
     wp_redirect($_SERVER['HTTP_REFERER']);

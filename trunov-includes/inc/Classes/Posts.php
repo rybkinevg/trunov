@@ -14,11 +14,9 @@ class Posts
         return $date . ' ' . current_time('H:i:s');
     }
 
-    protected static function show_error($obj, $message = null)
+    protected static function show_error($obj = null, $message = '')
     {
-        if (is_null($message))
-            $message = "<p>Текст ошибки: {$obj->get_error_message()}</p>";
-        else
+        if (!is_null($obj))
             $message .= "<p>Текст ошибки: {$obj->get_error_message()}</p>";
 
         $args = [
@@ -190,33 +188,17 @@ class Posts
         }
     }
 
-    public static function get_posts()
+    // ----------------------------------------------
+
+    static $imported_option_name = 'trunov_imported_posts';
+
+    private static function get_part(): int
     {
         global $wpdb;
 
-        // $count_query = "
-        // SELECT
-        //     COUNT(*)
-        // FROM
-        //     `aleksnet_document`
-        // WHERE
-        //     `parent_id` = '114'
-        // OR
-        //     `parent_id` = '115'
-        // OR
-        //     `parent_id` = '14820'
-        // ";
-
-        // $count = $wpdb->get_var($count_query);
-
         $query = "
         SELECT
-            `id`,
-            `name`,
-            `text`,
-            `date`,
-            `active`,
-            `parent_id`
+            COUNT(*)
         FROM
             `aleksnet_document`
         WHERE
@@ -225,16 +207,96 @@ class Posts
             `parent_id` = '115'
         OR
             `parent_id` = '14820'
-        ORDER BY
-            `id`
         ";
+
+        $count = $wpdb->get_var($query);
+
+        $part = round($count / 3);
+
+        return (int) $part;
+    }
+
+    private static function get_limit(): string
+    {
+        $start = 0;
+
+        $step = self::get_part();
+
+        $count = $step;
+
+        $status = self::get_status();
+
+        if ($status == 1) {
+
+            $start = $step;
+        } elseif ($status == 2) {
+
+            $start = $step + $step;
+
+            $count = $step - 1;
+        }
+
+        $limit = "
+            LIMIT
+                {$start}, {$count}
+        ";
+
+        return $limit;
+    }
+
+    private static function get_status(): int
+    {
+        $option = get_option(self::$imported_option_name, 0);
+
+        return (int) $option;
+    }
+
+    private static function set_status($status): bool
+    {
+        $updated = update_option(self::$imported_option_name, $status, false);
+
+        return $updated;
+    }
+
+    public static function get_posts()
+    {
+        $status = self::get_status();
+
+        if ($status == 3)
+            self::show_error(null, 'Все импортировано');
+
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `text`,
+                `date`,
+                `active`,
+                `parent_id`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '114'
+            OR
+                `parent_id` = '115'
+            OR
+                `parent_id` = '14820'
+            ORDER BY
+                `id`
+        ";
+
+        $limit = self::get_limit();
+
+        $query .= $limit;
 
         $posts = $wpdb->get_results($query);
 
         foreach ($posts as $post) {
 
             $data = [
-                'import_id'    => $post->id,
+                'ID'           => $post->id,
                 'post_title'   => sanitize_text_field($post->name),
                 'post_content' => $post->text,
                 'post_date'    => self::check_date($post->date),
@@ -243,18 +305,41 @@ class Posts
                 'post_status'  => ($post->active == 1) ? "publish" : "pending"
             ];
 
-            $inserted = wp_insert_post($data, true);
+            // $wpdb->insert используется вместо wp_insert_post,
+            // так как работа с базой напрямую намного быстрее
+            // в среднем, через wp_insert_post одна операция - 9 мин. (без категорий)
+            // в среднем, через wp_insert_post одна операция - 10 мин. (с категориями)
+            // в среднем, через $wpdb->insert одна операция - 30 сек. (без категорий)
+            // в среднем, через $wpdb->insert одна операция - 2 мин. (с категориями)
+            $inserted = $wpdb->insert(
+                $wpdb->posts,
+                $data
+            );
 
-            if (is_wp_error($inserted))
-                self::show_error($inserted);
+            if (!$inserted)
+                self::show_error(
+                    null,
+                    "
+                    <h2>Ошибка импорта</h2>
+                    <p>ID поста: {$post->id}</p>
+                    "
+                );
+
+            $cat_id = get_cat_ID('Новости СМИ');
 
             if ($post->parent_id == '115')
                 $cat_id = get_cat_ID('Новости');
-            else
-                $cat_id = get_cat_ID('Новости СМИ');
 
-            wp_set_post_categories($wpdb->insert_id, $cat_id);
+            $cat = wp_set_post_categories($wpdb->insert_id, $cat_id);
+
+            if (is_wp_error($cat))
+                self::show_error($cat);
         }
+
+        $updated = self::set_status(++$status);
+
+        if (!$updated)
+            wp_die($status);
     }
 
     public static function get_lawyers(): int

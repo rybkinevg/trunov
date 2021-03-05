@@ -4,7 +4,7 @@ namespace rybkinevg\trunov;
 
 class Topics
 {
-    public static function get()
+    public static function get_for_posts()
     {
         global $wpdb;
 

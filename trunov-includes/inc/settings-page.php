@@ -59,6 +59,16 @@ function add_my_setting()
             }
         </style>
 
+        <?php
+
+        $term = get_term_by('name', 'Книги, монографии', 'works-types');
+
+        $term_id = $term->term_id;
+
+        var_dump($term_id);
+
+        ?>
+
         <div class="block">
             <h2>Новости</h2>
             <div class="container">
@@ -71,7 +81,7 @@ function add_my_setting()
                             <p>Статус импорта - <?= get_option('trunov_imported_posts', 0); ?> из 3</p>
                         </div>
                         <div class="item__btn">
-                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                            <button class="button button-primary" type="submit">Импортировать</button>
                         </div>
                     </form>
                 </div>
@@ -112,7 +122,7 @@ function add_my_setting()
                             <p>Импортировать адвокатов и юристов, проставить категории и представительства, скачать и привязать миниатюры.</p>
                         </div>
                         <div class="item__btn">
-                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                            <button class="button button-primary" type="submit">Импортировать</button>
                         </div>
                     </form>
                 </div>
@@ -129,7 +139,92 @@ function add_my_setting()
                             <p>Импортировать все услуги с их дочерними страницами и проставить категории.</p>
                         </div>
                         <div class="item__btn">
-                            <button class="button button-primary" type="submit">Импортировать в базу</button>
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Книги</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_books" />
+                        <h2 class="item__title">Импортировать книги</h2>
+                        <div class="item__body">
+                            <p>Импортировать книги</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Научные и учебно-методические труды</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_works" />
+                        <h2 class="item__title">Импортировать труды</h2>
+                        <div class="item__body">
+                            <p>Импортировать научные и учебно-методические труды, проставить разделы и типы.</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Партнёры</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_partners" />
+                        <h2 class="item__title">Импортировать партнёров</h2>
+                        <div class="item__body">
+                            <p>Импортировать партнёров</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Реквизиты судов</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_court" />
+                        <h2 class="item__title">Импортировать реквизиты судов</h2>
+                        <div class="item__body">
+                            <p>Импортировать реквизиты судов</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <h2>Адвокату</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_for_lawyer" />
+                        <h2 class="item__title">Импортировать информацию для адвокатов</h2>
+                        <div class="item__body">
+                            <p>Импортировать информацию для адвокатов</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
                         </div>
                     </form>
                 </div>
@@ -204,6 +299,76 @@ add_action('admin_action_get_services_catalog', 'get_services_catalog_admin_acti
 function get_services_catalog_admin_action()
 {
     Posts::get_services_catalog();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Импортировать книги
+ */
+add_action('admin_action_get_books', 'get_books_admin_action');
+
+function get_books_admin_action()
+{
+    Posts::get_books();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Научные и учебно-методические труды
+ */
+add_action('admin_action_get_works', 'get_works_admin_action');
+
+function get_works_admin_action()
+{
+    Posts::get_works();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Партнёры
+ */
+add_action('admin_action_get_partners', 'get_partners_admin_action');
+
+function get_partners_admin_action()
+{
+    Posts::get_partners();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Реквизиты судов
+ */
+add_action('admin_action_get_court', 'get_court_admin_action');
+
+function get_court_admin_action()
+{
+    Posts::get_court();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Реквизиты судов
+ */
+add_action('admin_action_get_for_lawyer', 'get_for_lawyer_admin_action');
+
+function get_for_lawyer_admin_action()
+{
+    Posts::get_for_lawyer();
 
     wp_redirect($_SERVER['HTTP_REFERER']);
 

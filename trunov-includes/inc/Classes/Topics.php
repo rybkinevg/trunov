@@ -12,26 +12,25 @@ class Topics
 
         $table_topics_name = 'aleksnet_topic_document';
 
-        if ($type = 'news')
-            $query = "
-                SELECT
-                    `add`.`id_topic_dir`,
-                    `atd`.`name`
-                FROM
-                    `{$table_topics_id}` as `add`
-                JOIN
-                    `{$table_topics_name}` as `atd`
-                ON
-                    `add`.`id_topic_dir` = `atd`.`id`
-                WHERE
-                    `add`.`id_dir` = '114'
-                OR
-                    `add`.`id_dir` = '115'
-                OR
-                    `add`.`id_dir` = '14820'
-                GROUP BY
-                    `add`.`id_topic_dir`
-            ";
+        $query = "
+            SELECT
+                `add`.`id_topic_dir`,
+                `atd`.`name`
+            FROM
+                `{$table_topics_id}` as `add`
+            JOIN
+                `{$table_topics_name}` as `atd`
+            ON
+                `add`.`id_topic_dir` = `atd`.`id`
+            WHERE
+                `add`.`id_dir` = '114'
+            OR
+                `add`.`id_dir` = '115'
+            OR
+                `add`.`id_dir` = '14820'
+            GROUP BY
+                `add`.`id_topic_dir`
+        ";
 
         $topics = $wpdb->get_results($query);
 
@@ -54,7 +53,7 @@ class Topics
     {
         global $wpdb;
 
-        $topics = Topics::get();
+        $topics = Topics::get_for_posts();
 
         foreach ($topics as $topic) {
 
@@ -109,9 +108,9 @@ class Topics
         foreach ($topics as $topic) {
 
             $topic_data = [
-                'id'   => $topic->id,
-                'topic_id'   => $topic->id_topic_dir,
-                'name' => $topic->name
+                'id'       => $topic->id,
+                'topic_id' => $topic->id_topic_dir,
+                'name'     => $topic->name
             ];
 
             array_push($result, $topic_data);

@@ -154,7 +154,7 @@ class Posts
 
     public static function set_post_tax()
     {
-        $topics = Topics::get();
+        $topics = Topics::get_for_posts();
 
         foreach ($topics as $topic) {
 
@@ -347,31 +347,31 @@ class Posts
         global $wpdb;
 
         $query = "
-        SELECT
-            `p`.`id`,
-            `p`.`name`,
-            `p`.`text`,
-            `p`.`url_img`,
-            `p`.`date`,
-            `p`.`active`,
-            `p`.`parent_id`,
-            `t`.`id_topic`,
-            `t`.`id_topic_dir`,
-            `tn`.`name` as `topic_name`
-        FROM
-            `aleksnet_document` as `p`
-        LEFT JOIN
-            `aleksnet_doc_topic` as `t`
-        ON
-            `p`.`id` = `t`.`id`
-        LEFT JOIN
-            `aleksnet_topic_document` as `tn`
-        ON
-            `t`.`id_topic` = `tn`.`id`
-        WHERE
-            `p`.`parent_id` = '109'
-        OR
-            `p`.`parent_id` = '15712'
+            SELECT
+                `p`.`id`,
+                `p`.`name`,
+                `p`.`text`,
+                `p`.`url_img`,
+                `p`.`date`,
+                `p`.`active`,
+                `p`.`parent_id`,
+                `t`.`id_topic`,
+                `t`.`id_topic_dir`,
+                `tn`.`name` as `topic_name`
+            FROM
+                `aleksnet_document` as `p`
+            LEFT JOIN
+                `aleksnet_doc_topic` as `t`
+            ON
+                `p`.`id` = `t`.`id`
+            LEFT JOIN
+                `aleksnet_topic_document` as `tn`
+            ON
+                `t`.`id_topic` = `tn`.`id`
+            WHERE
+                `p`.`parent_id` = '109'
+            OR
+                `p`.`parent_id` = '15712'
         ";
 
         $posts = $wpdb->get_results($query);
@@ -517,16 +517,11 @@ class Posts
             if (is_wp_error($inserted)) {
 
                 $message = "
-                <p>ID поста: {$post->id}</p>
-                <p>ID родителя: {$post->parent_id}</p>
-                <p>Текст ошибки: {$inserted->get_error_message()}</p>
+                    <p>ID поста: {$post->id}</p>
+                    <p>ID родителя: {$post->parent_id}</p>
                 ";
 
-                $args = [
-                    'back_link' => true
-                ];
-
-                wp_die($message, '', $args);
+                self::show_error($inserted, $message);
             }
 
             // При импорте не понятно почему в конце `post_name` проставлялась цифра 2 (`post_name-2`)
@@ -597,16 +592,11 @@ class Posts
                 if (is_wp_error($child_inserted)) {
 
                     $message = "
-                            <p>ID поста: {$post->id}</p>
-                            <p>ID родителя: {$post->parent_id}</p>
-                            <p>Текст ошибки: {$child_inserted->get_error_message()}</p>
-                            ";
+                        <p>ID поста: {$post->id}</p>
+                        <p>ID родителя: {$post->parent_id}</p>
+                    ";
 
-                    $args = [
-                        'back_link' => true
-                    ];
-
-                    wp_die($message, '', $args);
+                    self::show_error($child_inserted, $message);
                 }
 
                 // При импорте не понятно почему в конце `post_name` проставлялась цифра 2 (`post_name-2`)
@@ -627,6 +617,313 @@ class Posts
 
                 self::get_services_catalog_children($child_inserted, $term_id);
             }
+        }
+    }
+
+    public static function get_books()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `anons`,
+                `url_img`,
+                `date`,
+                `text`,
+                `active`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '16400'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_content' => $post->text,
+                'post_excerpt' => $post->anons,
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'books'
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            self::set_post_thumb($inserted, $post->url_img);
+        }
+    }
+
+    public static function get_works()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `url_img`,
+                `url`,
+                `date`,
+                `text`,
+                `active`,
+                `parent_id`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '16076'
+            OR
+                `parent_id` = '15540'
+            OR
+                `parent_id` = '15011'
+            OR
+                `parent_id` = '15541'
+            OR
+                `parent_id` = '15012'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $meta = [
+                'work-url' => $post->url
+            ];
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_content' => $post->text,
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'works',
+                'meta_input'   => $meta,
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            // Книги, монографии
+            if ($post->parent_id == '15541') {
+
+                $tax_slug = 'works-categories';
+
+                $term = get_term_by('name', 'Публикации Айвар Людмилы Константиновны', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+
+                $tax_slug = 'works-types';
+
+                $term = get_term_by('name', 'Книги, монографии', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+            }
+
+            if ($post->parent_id == '15012') {
+
+                $tax_slug = 'works-categories';
+
+                $term = get_term_by('name', 'Публикации Трунова Игоря Леонидовича', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+
+                $tax_slug = 'works-types';
+
+                $term = get_term_by('name', 'Книги, монографии', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+            }
+
+            // Научные статьи
+            if ($post->parent_id == '15540') {
+
+                $tax_slug = 'works-categories';
+
+                $term = get_term_by('name', 'Публикации Айвар Людмилы Константиновны', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+            }
+
+            if ($post->parent_id == '15011') {
+
+                $tax_slug = 'works-categories';
+
+                $term = get_term_by('name', 'Публикации Трунова Игоря Леонидовича', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug);
+            }
+
+            // self::set_post_thumb($inserted, $post->url_img);
+        }
+    }
+
+    public static function get_partners()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `url_img`,
+                `url`,
+                `date`,
+                `active`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '15962'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $meta = [
+                'partners-url' => $post->url
+            ];
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'partners',
+                'meta_input'   => $meta,
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            // self::set_post_thumb($inserted, $post->url_img);
+        }
+    }
+
+    // Реквизиты судов
+    public static function get_court()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `text`,
+                `url_img`,
+                `url`,
+                `date`,
+                `active`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '116'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_content' => $post->text,
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'court'
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            // self::set_post_thumb($inserted, $post->url_img);
+        }
+    }
+
+    // Для адвоката
+    public static function get_for_lawyer()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `text`,
+                `url_img`,
+                `url`,
+                `date`,
+                `active`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '117'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_content' => $post->text,
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'for-lawyer'
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            // self::set_post_thumb($inserted, $post->url_img);
         }
     }
 }

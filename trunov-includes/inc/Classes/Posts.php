@@ -14,6 +14,14 @@ class Posts
         return $date . ' ' . current_time('H:i:s');
     }
 
+    protected static function check_title($str, $encoding = 'UTF-8')
+    {
+        $str = mb_strtolower($str);
+
+        return mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding)
+            . mb_substr($str, 1, null, $encoding);
+    }
+
     protected static function show_error($obj = null, $message = '')
     {
         if (!is_null($obj))
@@ -26,132 +34,6 @@ class Posts
         wp_die($message, 'Ошибка!', $args);
     }
 
-    /**
-     * Получение массива новостей из исходной таблицы данных
-     *
-     * @param  int $type   parent_id категории из иходной таблицы
-     *
-     * @return array       массив найденных постов
-     */
-    public static function get(int $type): array
-    {
-        global $wpdb;
-
-        $query = "SELECT `id`, `name`, `text`, `date`, `active` FROM `aleksnet_document` WHERE `parent_id` = '{$type}'";
-
-        $news = $wpdb->get_results($query);
-
-        return $news;
-    }
-
-    /**
-     * Импорт данных из исходной таблицы в таблицу wp_posts
-     *
-     * @param  array $news    массив постов
-     *
-     * @param  int   $catid   ID категории
-     *
-     * @return int            количество импортированных постов
-     */
-    public static function insert(array $news, int $catid): int
-    {
-        global $wpdb;
-
-        $count = 0;
-
-        foreach ($news as $item) {
-
-            $data = [
-                'ID'           => $item->id,
-                'post_title'   => sanitize_text_field($item->name),
-                'post_content' => $item->text,
-                'post_date'    => $item->date,
-                'post_name'    => $item->id,
-                'post_author'  => 1,
-                'post_status'  => ($item->active == 1) ? "publish" : "pending"
-            ];
-
-            $inserted = $wpdb->insert(
-                $wpdb->posts,
-                $data
-            );
-
-            if ($inserted) {
-
-                wp_set_post_categories($wpdb->insert_id, $catid);
-
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-    /**
-     * Получение массива ID постов, в которых есть метка фотоархив/видеоархив/анонс
-     *
-     * @param  string $type   тип метки, может быть: photoarchive, videoarchive, anons
-     *
-     * @return array          массив найденных ID, либо пустой массив при неправильной метке
-     *
-     * @throws array          пустой массив при неправильно указанной метке
-     */
-    public static function get_for_tags(string $type): array
-    {
-        global $wpdb;
-
-        $news = [];
-
-        switch ($type) {
-            case 'photoarchive':
-                $query = "SELECT `id` FROM `aleksnet_doc_topic` WHERE `id_topic` = '399'";
-                break;
-
-            case 'videoarchive':
-                $query = "SELECT `id` FROM `aleksnet_doc_topic` WHERE `id_topic` = '398' OR `id_topic` = '401' OR `id_topic` = '268'";
-                break;
-
-            case 'anons':
-                $query = "SELECT `id` FROM `aleksnet_document` WHERE `parent_id` = '14820'";
-                break;
-
-            default:
-                $query = null;
-                break;
-        }
-
-        if ($query)
-            $news = $wpdb->get_results($query);
-
-        return $news;
-    }
-
-    /**
-     * Установка найденным постам метки фотоархив/видеоархив/анонс
-     *
-     * @param  array $posts   массив ID постов
-     *
-     * @param  array $tagid   массив с ID метки, которую нужно установить
-     *
-     * @return int            количество постов, которым проставилась метка
-     */
-    public static function set_post_tags(array $posts, array $tagid): int
-    {
-        $count = 0;
-
-        foreach ($posts as $post) {
-
-            $added = wp_set_post_tags($post->id, $tagid, true);
-
-            if (!is_wp_error($added)) {
-
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
     public static function set_post_tax()
     {
         $topics = Topics::get_for_posts();
@@ -161,7 +43,7 @@ class Posts
             global $wpdb;
 
             $query = "
-            SELECT `adt`.`id`, `adt`.`id_dir`, `atd`.`name`
+            SELECT `adt`.`id`, `adt`.`id_dir`, `atd`.`name`, `atd`.`id_topic`
                 FROM `aleksnet_doc_topic` as `adt`
             JOIN `aleksnet_topic_document` as `atd`
                 ON `adt`.`id_topic` = `atd`.`id`
@@ -179,6 +61,48 @@ class Posts
 
             foreach ($posts as $post) {
 
+                // Аманлиев Марат в СМИ - нет ID он на утв.
+                if ($post->id_topic == '480') {
+
+                    // continue;
+                }
+
+                // Ступин Евгений в СМИ - нет ID он на утв.
+                if ($post->id_topic == '583') {
+
+                    // continue;
+                }
+
+                // Комаровская Марианна в СМИ - нет ID он на утв.
+                if ($post->id_topic == '432') {
+
+                    // continue;
+                }
+
+                // Алексеева Татьяна в СМИ - 15697
+                if ($post->id_topic == '481') {
+
+                    update_post_meta($post->id, 'person', '15697');
+                }
+
+                // Гололобов Дмитрий Владимирович в СМИ - 19374
+                if ($post->id_topic == '572') {
+
+                    update_post_meta($post->id, 'person', '19374');
+                }
+
+                // Игорь Трунов на Mediametrics - 15711
+                if ($post->id_topic == '607') {
+
+                    update_post_meta($post->id, 'person', '15711');
+                }
+
+                // Людмила Айвар на Mediametrics - 15710
+                if ($post->id_topic == '477') {
+
+                    update_post_meta($post->id, 'person', '15710');
+                }
+
                 $term = get_term_by('name', $post->name, $tax_slug);
 
                 $term_id = $term->term_id;
@@ -187,8 +111,6 @@ class Posts
             }
         }
     }
-
-    // ----------------------------------------------
 
     static $imported_option_name = 'trunov_imported_posts';
 
@@ -495,6 +417,8 @@ class Posts
                 `parent_id` = '16789'
             OR
                 `parent_id` = '16790'
+            OR
+                `parent_id` = '118'
             ";
 
         $posts = $wpdb->get_results($query);
@@ -538,6 +462,15 @@ class Posts
                 $tax_slug = 'services_catalog_categories';
 
                 $term = get_term_by('name', 'Физическим лицам', $tax_slug);
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($inserted, [$term_id], $tax_slug, false);
+            } elseif ($post->parent_id == '118') {
+
+                $tax_slug = 'services_catalog_categories';
+
+                $term = get_term_by('name', 'Юридический бизнес', $tax_slug);
 
                 $term_id = $term->term_id;
 
@@ -662,7 +595,7 @@ class Posts
                 self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
             }
 
-            self::set_post_thumb($inserted, $post->url_img);
+            // self::set_post_thumb($inserted, $post->url_img);
         }
     }
 
@@ -810,7 +743,7 @@ class Posts
         foreach ($posts as $post) {
 
             $meta = [
-                'partners-url' => $post->url
+                'url' => $post->url
             ];
 
             $data = [
@@ -914,6 +847,80 @@ class Posts
                 'post_name'    => $post->id,
                 'post_status'  => ($post->active == 1) ? "publish" : "pending",
                 'post_type'    => 'for-lawyer'
+            ];
+
+            $inserted = wp_insert_post($data, true);
+
+            if (is_wp_error($inserted)) {
+
+                self::show_error($inserted, "<p>ID поста: {$post->id}</p>");
+            }
+
+            // self::set_post_thumb($inserted, $post->url_img);
+        }
+    }
+
+    // Колонки СМИ
+    public static function get_media_columns()
+    {
+        global $wpdb;
+
+        $query = "
+            SELECT
+                `id`,
+                `name`,
+                `url_img`,
+                `url`,
+                `date`,
+                `active`,
+                `parent_id`
+            FROM
+                `aleksnet_document`
+            WHERE
+                `parent_id` = '16018'
+            OR
+                `parent_id` = '16019'
+            OR
+                `parent_id` = '16020'
+            OR
+                `parent_id` = '16021'
+            OR
+                `parent_id` = '16022'
+            OR
+                `parent_id` = '16023'
+            OR
+                `parent_id` = '16024'
+            ";
+
+        $posts = $wpdb->get_results($query);
+
+        foreach ($posts as $post) {
+
+            // Автор колонки
+            if ($post->parent_id == '16018') {
+
+                continue;
+            }
+
+            // СМИ
+            if ($post->parent_id == '16019') {
+
+                continue;
+            }
+
+            $meta = [
+                'url' => $post->url
+            ];
+
+            $data = [
+                'import_id'    => $post->id,
+                'post_title'   => sanitize_text_field($post->name),
+                'post_date'    => self::check_date($post->date),
+                'post_author'  => 1,
+                'post_name'    => $post->id,
+                'post_status'  => ($post->active == 1) ? "publish" : "pending",
+                'post_type'    => 'media-columns',
+                'meta_input'   => $meta
             ];
 
             $inserted = wp_insert_post($data, true);

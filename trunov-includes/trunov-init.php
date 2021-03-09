@@ -20,9 +20,11 @@
  * 18179 постов за 16 минут
  */
 
+require(dirname(__FILE__) . '/vendor/Kama_Post_Meta_Box.php');
 require(dirname(__FILE__) . '/vendor/taxonomy-thumb.php');
 
 require(dirname(__FILE__) . '/inc/meta-box-custom.php');
+require(dirname(__FILE__) . '/inc/default-permalinks-structure.php');
 
 require(dirname(__FILE__) . '/inc/Classes/Cats.php');
 require(dirname(__FILE__) . '/inc/Classes/Tags.php');
@@ -30,6 +32,8 @@ require(dirname(__FILE__) . '/inc/Classes/Posts.php');
 require(dirname(__FILE__) . '/inc/Classes/Images.php');
 require(dirname(__FILE__) . '/inc/Classes/Taxonomy.php');
 require(dirname(__FILE__) . '/inc/Classes/Topics.php');
+require(dirname(__FILE__) . '/inc/Classes/Transfer.php');
+require(dirname(__FILE__) . '/inc/Classes/Partners.php');
 
 require(dirname(__FILE__) . '/inc/post-type-post.php');
 require(dirname(__FILE__) . '/inc/post-type-lawyers.php');
@@ -37,6 +41,7 @@ require(dirname(__FILE__) . '/inc/post-type-books.php');
 require(dirname(__FILE__) . '/inc/post-type-works.php');
 require(dirname(__FILE__) . '/inc/post-type-court.php');
 require(dirname(__FILE__) . '/inc/post-type-partners.php');
+require(dirname(__FILE__) . '/inc/post-type-media-columns.php');
 require(dirname(__FILE__) . '/inc/post-type-for-lawyer.php');
 require(dirname(__FILE__) . '/inc/post-type-services-catalog.php');
 

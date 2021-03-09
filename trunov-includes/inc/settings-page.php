@@ -1,6 +1,6 @@
 <?php
 
-use rybkinevg\trunov\{Cats, Tags, Posts, Images, Taxonomy, Topics};
+use rybkinevg\trunov\{Cats, Tags, Posts, Images, Partners, Taxonomy, Topics};
 
 add_action('admin_menu', function () {
 
@@ -61,11 +61,15 @@ function add_my_setting()
 
         <?php
 
-        $term = get_term_by('name', 'Книги, монографии', 'works-types');
+        function upFirstLetter($str, $encoding = 'UTF-8')
+        {
+            $str = mb_strtolower($str);
 
-        $term_id = $term->term_id;
+            return mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding)
+                . mb_substr($str, 1, null, $encoding);
+        }
 
-        var_dump($term_id);
+        echo upFirstLetter('ПРИВЕТ');
 
         ?>
 
@@ -230,6 +234,23 @@ function add_my_setting()
                 </div>
             </div>
         </div>
+        <div class="block">
+            <h2>Колонки СМИ</h2>
+            <div class="container">
+                <div class="item">
+                    <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                        <input type="hidden" name="action" value="get_media_columns" />
+                        <h2 class="item__title">Импортировать колонки СМИ</h2>
+                        <div class="item__body">
+                            <p>Импортировать колонки СМИ</p>
+                        </div>
+                        <div class="item__btn">
+                            <button class="button button-primary" type="submit">Импортировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 <?php
 
@@ -369,6 +390,20 @@ add_action('admin_action_get_for_lawyer', 'get_for_lawyer_admin_action');
 function get_for_lawyer_admin_action()
 {
     Posts::get_for_lawyer();
+
+    wp_redirect($_SERVER['HTTP_REFERER']);
+
+    exit();
+}
+
+/**
+ * Колонки СМИ
+ */
+add_action('admin_action_get_media_columns', 'get_media_columns_admin_action');
+
+function get_media_columns_admin_action()
+{
+    Posts::get_media_columns();
 
     wp_redirect($_SERVER['HTTP_REFERER']);
 

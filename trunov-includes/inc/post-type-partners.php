@@ -31,7 +31,7 @@ function register_partners()
         'menu_position'       => null,
         'menu_icon'           => 'dashicons-groups',
         'hierarchical'        => false,
-        'supports'            => ['title', 'thumbnail', 'custom-fields'],
+        'supports'            => ['title', 'thumbnail'],
         'taxonomies'          => [],
         'has_archive'         => true,
         'rewrite'             => true,
@@ -41,6 +41,9 @@ function register_partners()
     register_post_type($post_type, $args);
 }
 
+/**
+ * Добавление новых колонок
+ */
 add_filter('manage_' . 'partners' . '_posts_columns', 'add_partners_columns');
 
 function add_partners_columns($columns)
@@ -55,6 +58,9 @@ function add_partners_columns($columns)
     return array_slice($columns, 0, 1) + $columns + $new_columns;
 }
 
+/**
+ * Заполнение новых колонок
+ */
 add_action('manage_' . 'partners' . '_posts_custom_column', 'fill_partners_columns');
 
 function fill_partners_columns($column_name)
@@ -68,8 +74,31 @@ function fill_partners_columns($column_name)
 
     if ($column_name === 'partners-url') {
 
-        $link = get_post_meta(get_the_ID(), 'partners-url', true);
+        $link = get_post_meta(get_the_ID(), 'url', true);
 
         echo ($link) ? $link : '-';
     }
 };
+
+/**
+ * Мета поля
+ */
+if (class_exists('Kama_Post_Meta_Box')) {
+
+    $args = [
+        'id'         => '_partners',
+        'title'      => 'Ссылка на партнёра',
+        'post_type'  => [
+            'partners'
+        ],
+        'fields'     => [
+            'url' => [
+                'type'  => 'url',
+                'title' => 'Ссылка',
+                'desc'  => 'Укажите ссылку на партнёра'
+            ],
+        ],
+    ];
+
+    new Kama_Post_Meta_Box($args);
+}

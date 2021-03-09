@@ -5,6 +5,7 @@ namespace rybkinevg\trunov;
 class Transfer
 {
     # HELPERS
+
     protected static function show_error($obj = null, $message = '')
     {
         if (!is_null($obj))
@@ -36,25 +37,7 @@ class Transfer
 
     # INSERT FUNCS
 
-    public static function get(string $table, string $where, bool $count = false)
-    {
-        global $wpdb;
-
-        if ($count) {
-
-            $query = "SELECT COUNT(*) FROM `{$table}` {$where} ORDER BY `id`";
-
-            return $wpdb->get_var($query);
-        }
-
-        $query = "SELECT * FROM `{$table}` WHERE {$where}";
-
-        $posts = $wpdb->get_results($query);
-
-        return $posts;
-    }
-
-    public static function generate_args($post, array $args): array
+    protected static function generate_args($post, array $args): array
     {
         $default = [
             'import_id'    => $post->id,
@@ -66,7 +49,8 @@ class Transfer
             'post_status'  => ($post->active == 1) ? "publish" : "pending",
             'post_type'    => 'post',
             'post_excerpt' => '',
-            'meta_input'   => ''
+            'meta_input'   => '',
+            'post_parent'  => 0,
         ];
 
         $data = wp_parse_args($args, $default);
@@ -74,7 +58,7 @@ class Transfer
         return $data;
     }
 
-    protected static function set_post_thumb($post_id, $thumb_url, $prefix = 'd_')
+    protected static function set_post_thumb($post_id, $thumb_url, $type = 'post', $prefix = 'd_')
     {
         require_once(ABSPATH . 'wp-admin/includes/media.php');
         require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -97,18 +81,13 @@ class Transfer
             if (is_wp_error($try_thumb_id)) {
 
                 $message = "
-                <p>ID поста: {$post_id}</p>
-                <p>Переданная ссылка: {$thumb_url}</p>
-                <p>Конвертированная ссылка: {$url}</p>
-                <p>Повторно конвертированная ссылка: {$try_this_url}</p>
-                <p>Текст ошибки: {$try_thumb_id->get_error_message()}</p>
+                    <p>ID поста: {$post_id}</p>
+                    <p>Переданная ссылка: {$thumb_url}</p>
+                    <p>Конвертированная ссылка: {$url}</p>
+                    <p>Повторно конвертированная ссылка: {$try_this_url}</p>
                 ";
 
-                $args = [
-                    'back_link' => true
-                ];
-
-                wp_die($message, "Ошибка", $args);
+                self::show_error($try_this_url, $message);
             }
 
             $thumb_id = $try_thumb_id;
@@ -118,4 +97,27 @@ class Transfer
     }
 
     # SETTINGS PAGE
+
+    public static function init()
+    {
+        add_action('admin_menu', function () {
+
+            add_menu_page(
+                'Опции переноса сайта',
+                'Перенос сайта',
+                'manage_options',
+                'transfer-options',
+                [__CLASS__, 'generate_page'],
+                '',
+                4
+            );
+        });
+
+        Posts::actions();
+    }
+
+    public static function generate_page()
+    {
+        include(dirname(__FILE__) . '/transfer-page.php');
+    }
 }

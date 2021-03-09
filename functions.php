@@ -183,4 +183,4 @@ if (defined('JETPACK__VERSION')) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
-require get_template_directory() . '/trunov-includes/trunov-init.php';
+require get_template_directory() . '/includes/init.php';

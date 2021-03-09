@@ -4,11 +4,11 @@
  * Тип записи: Услуги
  */
 
-$post_type_name = 'services-catalog';
+$post_type_name = 'services';
 
-add_action('init', 'register_services_catalog');
+add_action('init', 'register_services');
 
-function register_services_catalog()
+function register_services()
 {
     global $post_type_name;
 
@@ -46,13 +46,13 @@ function register_services_catalog()
     register_post_type($post_type_name, $args);
 }
 
-add_action('init', 'create_services_catalog_categories');
+add_action('init', 'create_services_categories');
 
-function create_services_catalog_categories()
+function create_services_categories()
 {
     global $post_type_name;
 
-    $tax_name = 'services_catalog_categories';
+    $tax_name = 'services_categories';
 
     $post_types = [$post_type_name];
 
@@ -98,7 +98,7 @@ function create_services_catalog_categories()
 /**
  * Добавляет фильтр по таксономиям
  */
-add_action('restrict_manage_posts', 'services_catalog_taxes_filter');
+// add_action('restrict_manage_posts', 'services_catalog_taxes_filter');
 
 function services_catalog_taxes_filter()
 {

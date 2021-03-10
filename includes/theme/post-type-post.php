@@ -108,7 +108,7 @@ function create_post_taxes()
         [
             'id'   => '461',
             'name' => 'Услуги',
-            'slug' => 'services'
+            'slug' => '_services'
         ],
         [
             'id'   => '447',
@@ -154,7 +154,7 @@ function post_taxes_filter()
             'tv',
             'high-profile-cases',
             'media-lawyers',
-            'services',
+            '_services',
             'topics'
         ];
 
@@ -182,61 +182,4 @@ function post_taxes_filter()
             }
         }
     }
-}
-
-// Мета поля
-if (class_exists('Kama_Post_Meta_Box')) {
-
-    function get_options($post_type)
-    {
-        $options = [
-            '' => 'Не выбрано'
-        ];
-
-        $args = [
-            'posts_per_page' => -1,
-            'post_type'      => $post_type,
-            'post_status'    => 'publish'
-        ];
-
-        $query = new WP_Query($args);
-
-        if ($query->have_posts()) {
-
-            while ($query->have_posts()) {
-
-                $query->the_post();
-
-                $options[get_the_ID()] = get_the_title();
-            }
-        }
-
-        wp_reset_postdata();
-
-        return $options;
-    }
-
-    $args = [
-        'id'         => '_post',
-        'title'      => 'Дополнительные поля',
-        'post_type'  => [
-            'post'
-        ],
-        'fields'     => [
-            'person' => [
-                'type'    => 'select',
-                'title'   => 'Персона',
-                'desc'    => 'Выберите ФИО адвоката из списка доступных',
-                'options' => get_options('lawyers'),
-            ],
-            'service' => [
-                'type'    => 'select',
-                'title'   => 'Услуги',
-                'desc'    => 'Выберите услугу из списка доступных',
-                'options' => get_options('services-catalog'),
-            ],
-        ],
-    ];
-
-    new Kama_Post_Meta_Box($args);
 }

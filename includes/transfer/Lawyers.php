@@ -97,4 +97,25 @@ class Lawyers extends Transfer
             parent::set_post_thumb($post->id, $post->url_img);
         }
     }
+
+    public static function actions()
+    {
+        add_action('admin_action_' . 'lawyers' . '_get', function () {
+
+            self::set();
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+
+        add_action('admin_action_' . 'lawyers' . '_set_thumbs', function () {
+
+            self::set_thumbs();
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+    }
 }

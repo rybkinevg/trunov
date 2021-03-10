@@ -39,12 +39,12 @@ use rybkinevg\trunov\Posts;
     </style>
 
     <div class="block">
-        <h2>Новости</h2>
+        <h2>Адвокаты</h2>
         <div class="container">
             <div class="item">
                 <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="get_posts" />
-                    <h3 class="item__title">Импорт новостей</h3>
+                    <input type="hidden" name="action" value="lawyers_get" />
+                    <h3 class="item__title">Импорт адвокатов</h3>
                     <div class="item__btn">
                         <button class="button button-primary" type="submit">Импортировать</button>
                     </div>
@@ -52,25 +52,7 @@ use rybkinevg\trunov\Posts;
             </div>
             <div class="item">
                 <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="set_taxes" />
-                    <h3 class="item__title">Заполнение таксономий</h3>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Заполнить</button>
-                    </div>
-                </form>
-            </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="set_post_tax" />
-                    <h3 class="item__title">Привязать таксономии к постам</h3>
-                    <div class="item__btn">
-                        <button class="button button-primary" type="submit">Привязать</button>
-                    </div>
-                </form>
-            </div>
-            <div class="item">
-                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
-                    <input type="hidden" name="action" value="set_thumbs" />
+                    <input type="hidden" name="action" value="lawyers_set_thumbs" />
                     <h3 class="item__title">Скачать и установить миниатюры</h3>
                     <div class="item__btn">
                         <button class="button button-primary" type="submit">Установить</button>
@@ -79,4 +61,62 @@ use rybkinevg\trunov\Posts;
             </div>
         </div>
     </div>
+
+    <div class="block">
+        <h2>Услуги</h2>
+        <div class="container">
+            <div class="item">
+                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                    <input type="hidden" name="action" value="services_get" />
+                    <h3 class="item__title">Импорт услуг и их дочерних страниц</h3>
+                    <div class="item__btn">
+                        <button class="button button-primary" type="submit">Импортировать</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="block">
+        <h2>Новости</h2>
+        <div class="container">
+            <div class="item">
+                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                    <input type="hidden" name="action" value="news_get" />
+                    <h3 class="item__title">Импорт новостей</h3>
+                    <div class="item__btn">
+                        <button class="button button-primary" type="submit">Импортировать</button>
+                    </div>
+                </form>
+            </div>
+            <div class="item">
+                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                    <input type="hidden" name="action" value="news_set_taxes" />
+                    <h3 class="item__title">Заполнение таксономий</h3>
+                    <div class="item__btn">
+                        <button class="button button-primary" type="submit">Заполнить</button>
+                    </div>
+                </form>
+            </div>
+            <div class="item">
+                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                    <input type="hidden" name="action" value="news_set_post_tax" />
+                    <h3 class="item__title">Привязать таксономии к постам</h3>
+                    <div class="item__btn">
+                        <button class="button button-primary" type="submit">Привязать</button>
+                    </div>
+                </form>
+            </div>
+            <div class="item">
+                <form method="POST" action="<?php echo admin_url('admin.php'); ?>">
+                    <input type="hidden" name="action" value="news_set_thumbs" />
+                    <h3 class="item__title">Скачать и установить миниатюры</h3>
+                    <div class="item__btn">
+                        <button class="button button-primary" type="submit">Установить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>

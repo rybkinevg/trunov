@@ -96,8 +96,6 @@ class Posts extends Transfer
                 `add`.`id_dir` = '14820'
             GROUP BY
                 `add`.`id_topic_dir`
-            ORDER BY
-                `id`
         ";
 
         $topics = $wpdb->get_results($query);
@@ -162,14 +160,20 @@ class Posts extends Transfer
 
         foreach ($topics as $topic) {
 
+            $tax = get_taxonomies(['description' => $topic['id']]);
+
+            if (!$tax) continue;
+
+            $tax_slug = array_shift($tax);
+
             global $wpdb;
 
             $query = "
                 SELECT
                     `adt`.`id`,
-                    `adt`.`id_dir`,
                     `atd`.`name`,
-                    `atd`.`id_topic`
+                    `adt`.`id_topic`,
+                    `adt`.`id_topic_dir`
                 FROM
                     `aleksnet_doc_topic` as `adt`
                 JOIN
@@ -184,67 +188,111 @@ class Posts extends Transfer
                     `adt`.`id_dir` = '115'
                 OR
                     `adt`.`id_dir` = '14820'
-                ORDER BY
-                    `id`
             ";
 
             $posts = $wpdb->get_results($query);
 
-            $tax = get_taxonomies(['description' => $topic['id']]);
-
-            $tax_slug = array_shift($tax);
-
             foreach ($posts as $post) {
 
-                // Аманлиев Марат в СМИ - нет ID он на утв.
-                if ($post->id_topic == '480') {
+                // Услуги
+                if ($post->id_topic_dir == '461') {
 
-                    // continue;
+                    self::set_service_meta($post->id, $post->name);
                 }
 
-                // Ступин Евгений в СМИ - нет ID он на утв.
-                if ($post->id_topic == '583') {
+                // Адвокаты в СМИ
+                if ($post->id_topic_dir == '431') {
 
-                    // continue;
-                }
-
-                // Комаровская Марианна в СМИ - нет ID он на утв.
-                if ($post->id_topic == '432') {
-
-                    // continue;
-                }
-
-                // Алексеева Татьяна в СМИ - 15697
-                if ($post->id_topic == '481') {
-
-                    update_post_meta($post->id, 'person', '15697');
-                }
-
-                // Гололобов Дмитрий Владимирович в СМИ - 19374
-                if ($post->id_topic == '572') {
-
-                    update_post_meta($post->id, 'person', '19374');
-                }
-
-                // Игорь Трунов на Mediametrics - 15711
-                if ($post->id_topic == '607') {
-
-                    update_post_meta($post->id, 'person', '15711');
-                }
-
-                // Людмила Айвар на Mediametrics - 15710
-                if ($post->id_topic == '477') {
-
-                    update_post_meta($post->id, 'person', '15710');
+                    self::set_person_meta($post->id, $post->id_topic);
                 }
 
                 $term = get_term_by('name', $post->name, $tax_slug);
 
                 $term_id = $term->term_id;
 
-                wp_set_post_terms($post->id, [$term_id], $tax_slug, true);
+                $inserted = wp_set_post_terms($post->id, [$term_id], $tax_slug, true);
+
+                if (is_wp_error($inserted)) {
+
+                    $message = "
+                        <p>ID поста: {$post->id}</p>
+                        <p>Topic ID: {$topic['id']}</p>
+                        <p>Slug таксы: {$tax_slug}</p>
+                        <p>ID термина: {$post->id_topic}</p>
+                        <p>Термин: {$term_id}</p>
+                    ";
+
+                    parent::show_error($inserted, $message);
+                }
             }
         }
+    }
+
+    protected static function set_service_meta($post_id, $topic_name)
+    {
+        $service = get_page_by_title($topic_name, 'OBJECT', 'services');
+
+        if (is_null($service)) return;
+
+        $data = carbon_get_post_meta($post_id, 'services');
+
+        if (empty($data)) {
+
+            $data = $service->ID;
+        } else {
+
+            array_push($data, $service->ID);
+        }
+
+        carbon_set_post_meta($post_id, 'services', $data);
+    }
+
+    protected static function set_person_meta($post_id, $topic_id)
+    {
+        $data = carbon_get_post_meta($post_id, 'persons');
+
+        switch ($topic_id) {
+
+            case '481':
+                // Алексеева Татьяна в СМИ - 15697
+                $value = '15697';
+                break;
+
+            case '572':
+                // Гололобов Дмитрий Владимирович в СМИ - 19374
+                $value = '19374';
+                break;
+
+            case '607':
+                // Игорь Трунов на Mediametrics - 15711
+                $value = '15711';
+                break;
+
+            case '477':
+                // Людмила Айвар на Mediametrics - 15710
+                $value = '15710';
+                break;
+
+            default:
+                $value = null;
+                break;
+        }
+
+        // $topic_id == '480' Аманлиев Марат в СМИ - нет ID, статус адвоката - на утверждении
+        // $topic_id == '583' Ступин Евгений в СМИ - нет ID, статус адвоката - на утверждении
+        // $topic_id == '432' Комаровская Марианна в СМИ - нет ID, статус адвоката - на утверждении
+
+        if (is_null($value)) return;
+
+        if (empty($data)) {
+
+            $data = $value;
+        } else {
+
+            array_push($data, $value);
+        }
+
+        carbon_set_post_meta($post_id, 'person', $data);
     }
 
     public static function set_thumbs()
@@ -259,36 +307,36 @@ class Posts extends Transfer
 
     public static function actions()
     {
-        add_action('admin_action_' . 'get_posts', function () {
+        add_action('admin_action_' . 'news' . '_get', function () {
 
-            Posts::set();
-
-            wp_redirect($_SERVER['HTTP_REFERER']);
-
-            exit();
-        });
-
-        add_action('admin_action_' . 'set_taxes', function () {
-
-            Posts::set_taxes();
+            self::set();
 
             wp_redirect($_SERVER['HTTP_REFERER']);
 
             exit();
         });
 
-        add_action('admin_action_' . 'set_post_tax', function () {
+        add_action('admin_action_' . 'news' . '_set_taxes', function () {
 
-            Posts::set_post_tax();
+            self::set_taxes();
 
             wp_redirect($_SERVER['HTTP_REFERER']);
 
             exit();
         });
 
-        add_action('admin_action_' . 'set_thumbs', function () {
+        add_action('admin_action_' . 'news' . '_set_post_tax', function () {
 
-            Posts::set_thumbs();
+            self::set_post_tax();
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+
+        add_action('admin_action_' . 'news' . '_set_thumbs', function () {
+
+            self::set_thumbs();
 
             wp_redirect($_SERVER['HTTP_REFERER']);
 

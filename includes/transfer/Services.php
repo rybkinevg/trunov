@@ -147,4 +147,16 @@ class Services extends Transfer
             }
         }
     }
+
+    public static function actions()
+    {
+        add_action('admin_action_' . 'services' . '_get', function () {
+
+            self::set();
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+    }
 }

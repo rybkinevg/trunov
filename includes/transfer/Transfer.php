@@ -30,9 +30,14 @@ class Transfer
 
     protected static function check_title($str, $encoding = 'UTF-8')
     {
-        $str = sanitize_text_field(mb_strtolower($str));
+        if ($str === mb_strtoupper($str)) {
 
-        return mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) . mb_substr($str, 1, null, $encoding);
+            $str = sanitize_text_field(mb_strtolower($str));
+
+            return mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) . mb_substr($str, 1, null, $encoding);
+        }
+
+        return sanitize_text_field($str);
     }
 
     # INSERT FUNCS
@@ -113,6 +118,8 @@ class Transfer
             );
         });
 
+        Lawyers::actions();
+        Services::actions();
         Posts::actions();
     }
 

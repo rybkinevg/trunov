@@ -98,24 +98,49 @@ function create_media()
     ];
 
     register_taxonomy($tax_name, $post_types, $args);
-}
 
-// Мета поля
-if (class_exists('Kama_Post_Meta_Box')) {
+    wp_insert_term(
+        'Мир и Политика',
+        $tax_name,
+        [
+            'slug'        => sanitize_title('Мир и Политика'),
+            'description' => '16020'
+        ]
+    );
 
-    $args = [
-        'id'         => '_media_columns',
-        'title'      => 'Ссылка на издание',
-        'post_type'  => [
-            'media-columns'
-        ],
-        'fields'     => [
-            'url' => [
-                'type'  => 'url',
-                'title' => 'Укажите ссылку на издание'
-            ],
-        ],
-    ];
+    wp_insert_term(
+        'Вечерняя Москва',
+        $tax_name,
+        [
+            'slug'        => sanitize_title('Вечерняя Москва'),
+            'description' => '16021'
+        ]
+    );
 
-    new Kama_Post_Meta_Box($args);
+    wp_insert_term(
+        'INFOX.RU',
+        $tax_name,
+        [
+            'slug'        => sanitize_title('INFOX.RU'),
+            'description' => '16022'
+        ]
+    );
+
+    wp_insert_term(
+        'РБК',
+        $tax_name,
+        [
+            'slug'        => sanitize_title('РБК'),
+            'description' => '16023'
+        ]
+    );
+
+    wp_insert_term(
+        'Forbes',
+        $tax_name,
+        [
+            'slug'        => sanitize_title('Forbes'),
+            'description' => '16024'
+        ]
+    );
 }

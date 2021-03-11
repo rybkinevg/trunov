@@ -155,6 +155,8 @@ class Transfer
         Court::actions();
         Partners::actions();
         For_lawyer::actions();
+        Media_columns::actions();
+        SOS::actions();
     }
 
     public static function generate_page()

@@ -2,31 +2,21 @@
 
 namespace rybkinevg\trunov;
 
-class Media_columns extends Transfer
+class SOS extends Transfer
 {
-    static $post_type = 'media-columns';
+    static $post_type = 'sos';
 
     protected static function get(): array
     {
         global $wpdb;
 
-        // Убрал из запроса выборки по 16018 (= Колонки Адвоката трунова)
-        // Убрал из запроса выборки по 16019 (= Список СМИ, указал их руками)
         $query = "
             SELECT
                 *
             FROM
                 `aleksnet_document`
             WHERE
-                `parent_id` = '16020'
-            OR
-                `parent_id` = '16021'
-            OR
-                `parent_id` = '16022'
-            OR
-                `parent_id` = '16023'
-            OR
-                `parent_id` = '16024'
+                `parent_id` = '16294'
             ORDER BY
                 `id`
         ";
@@ -48,7 +38,7 @@ class Media_columns extends Transfer
         foreach ($posts as $post) {
 
             $args = [
-                'post_type'    => self::$post_type
+                'post_type' => self::$post_type
             ];
 
             $data = parent::generate_args($post, $args);
@@ -59,56 +49,6 @@ class Media_columns extends Transfer
 
                 parent::show_error($inserted, "<p>ID поста: {$post->id}</p>");
             }
-
-            carbon_set_post_meta($inserted, 'media-columns-url', $post->url);
-
-            $tax_slug = 'media';
-
-            if ($post->parent_id == '16020') {
-
-                $term = get_term_by('name', 'Мир и Политика', $tax_slug);
-            }
-
-            if ($post->parent_id == '16021') {
-
-                $term = get_term_by('name', 'Вечерняя Москва', $tax_slug);
-            }
-
-            if ($post->parent_id == '16022') {
-
-                $term = get_term_by('name', 'INFOX.RU', $tax_slug);
-            }
-
-            if ($post->parent_id == '16023') {
-
-                $term = get_term_by('name', 'РБК', $tax_slug);
-            }
-
-            if ($post->parent_id == '16024') {
-
-                $term = get_term_by('name', 'Forbes', $tax_slug);
-            }
-
-            $term_id = $term->term_id;
-
-            $inserted = wp_set_post_terms($post->id, [$term_id], $tax_slug, true);
-
-            if (is_wp_error($inserted)) {
-
-                $message = "
-                        <p>ID поста: {$post->id}</p>
-                        <p>ID термина: {$term_id}</p>
-                    ";
-
-                parent::show_error($inserted, $message);
-            }
-
-            wp_set_post_terms(
-                $post->id,
-                [get_term_by('name', 'Трунов Игорь Леонидович', 'column-author')->term_id],
-                'column-author',
-                true
-            );
         }
 
         $updated = parent::set_status(self::$post_type, 'Выполнено');
@@ -160,12 +100,12 @@ class Media_columns extends Transfer
     public static function page_block()
     {
         $data = [
-            'title' => 'Колонки СМИ',
+            'title' => 'SOS',
             'status' => parent::get_status(self::$post_type),
             'forms' => [
                 [
                     'title'  => 'Импорт',
-                    'desc'   => 'Импорт записей из колонок СМИ',
+                    'desc'   => 'Импорт записи SOS',
                     'btn'    => 'Импортировать',
                     'action' => self::$post_type . '_get'
                 ],

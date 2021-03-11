@@ -141,6 +141,8 @@ function print_block($args)
     print_block(rybkinevg\trunov\Court::page_block());
     print_block(rybkinevg\trunov\Partners::page_block());
     print_block(rybkinevg\trunov\For_lawyer::page_block());
+    print_block(rybkinevg\trunov\Media_columns::page_block());
+    print_block(rybkinevg\trunov\SOS::page_block());
 
     ?>
 

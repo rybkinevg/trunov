@@ -19,6 +19,7 @@ require(dirname(__FILE__) . '/transfer/Posts.php');
 require(dirname(__FILE__) . '/transfer/Media_columns.php');
 require(dirname(__FILE__) . '/transfer/Services.php');
 require(dirname(__FILE__) . '/transfer/Works.php');
+require(dirname(__FILE__) . '/transfer/SOS.php');
 
 // Post types
 require(dirname(__FILE__) . '/theme/post-type-post.php');
@@ -30,6 +31,7 @@ require(dirname(__FILE__) . '/theme/post-type-partners.php');
 require(dirname(__FILE__) . '/theme/post-type-media-columns.php');
 require(dirname(__FILE__) . '/theme/post-type-for-lawyer.php');
 require(dirname(__FILE__) . '/theme/post-type-services.php');
+require(dirname(__FILE__) . '/theme/post-type-sos.php');
 
 // Includes
 require(dirname(__FILE__) . '/theme/meta-box-custom.php');

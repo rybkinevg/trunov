@@ -135,6 +135,15 @@ function create_post_taxes()
             $args
         );
     }
+
+    wp_insert_term(
+        '«Громкий плагиат»',
+        'high-profile-cases',
+        [
+            'slug'        => sanitize_title('«Громкий плагиат»'),
+            'description' => '547'
+        ]
+    );
 }
 
 /**

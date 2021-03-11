@@ -153,6 +153,10 @@ class Posts extends Transfer
 
             foreach ($terms as $term) {
 
+                // Не импортировать "Громкий плагиат" из Сопутствующих тем, забил его руками в таксу - Громкие дела
+                if ($term->id == '547')
+                    continue;
+
                 $args = [
                     'description' => $term->id,
                     'slug'        => sanitize_title($term->name),
@@ -216,6 +220,19 @@ class Posts extends Transfer
                     self::set_person_meta($post->id, $post->id_topic);
                 }
 
+                // "Громкий плагиат" в Громкие дела
+                if ($post->id_topic_dir == '447' && $post->id_topic == '547') {
+
+                    wp_set_post_terms(
+                        $post->id,
+                        [get_term_by('name', '«Громкий плагиат»', 'high-profile-cases')->term_id],
+                        'high-profile-cases',
+                        true
+                    );
+
+                    continue;
+                }
+
                 $term = get_term_by('name', $post->name, $tax_slug);
 
                 $term_id = $term->term_id;
@@ -242,7 +259,8 @@ class Posts extends Transfer
     {
         $service = get_page_by_title($topic_name, 'OBJECT', 'services');
 
-        if (is_null($service)) return;
+        if (is_null($service))
+            return;
 
         $data = carbon_get_post_meta($post_id, 'services');
 
@@ -277,11 +295,23 @@ class Posts extends Transfer
             case '607':
                 // Адвокаты в СМИ - Игорь Трунов на Mediametrics - 15711
                 $value = '15711';
+
+                $term = get_term_by('name', 'Mediametrics', 'smi');
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($post_id, [$term_id], 'smi', true);
                 break;
 
             case '477':
                 // Адвокаты в СМИ - Людмила Айвар на Mediametrics - 15710
                 $value = '15710';
+
+                $term = get_term_by('name', 'Mediametrics', 'smi');
+
+                $term_id = $term->term_id;
+
+                wp_set_post_terms($post_id, [$term_id], 'smi', true);
                 break;
 
             case '401':

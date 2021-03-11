@@ -40,6 +40,20 @@ class Transfer
         return sanitize_text_field($str);
     }
 
+    public static function get_status($name)
+    {
+        $option = get_option("trunov-imported-{$name}", 0);
+
+        return $option;
+    }
+
+    public static function set_status($name, $status): bool
+    {
+        $updated = update_option("trunov-imported-{$name}", $status, false);
+
+        return $updated;
+    }
+
     # INSERT FUNCS
 
     protected static function generate_args($post, array $args): array
@@ -101,6 +115,21 @@ class Transfer
         set_post_thumbnail($post_id, $thumb_id);
     }
 
+    public static function delete($posts, $post_type)
+    {
+        foreach ($posts as $post) {
+
+            $deleted = wp_delete_post($post->id, true);
+
+            if (!$deleted) {
+
+                self::show_error(null, $post->id);
+            }
+        }
+
+        self::set_status($post_type, 0);
+    }
+
     # SETTINGS PAGE
 
     public static function init()
@@ -121,6 +150,11 @@ class Transfer
         Lawyers::actions();
         Services::actions();
         Posts::actions();
+        Works::actions();
+        Books::actions();
+        Court::actions();
+        Partners::actions();
+        For_lawyer::actions();
     }
 
     public static function generate_page()

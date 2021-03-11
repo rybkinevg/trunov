@@ -47,6 +47,11 @@ class Lawyers extends Transfer
 
     public static function set()
     {
+        $status = parent::get_status(self::$post_type);
+
+        if ($status)
+            parent::show_error(null, 'Данные типа записи "' . self::$post_type . '" уже импортированы');
+
         $posts = self::get();
 
         foreach ($posts as $post) {
@@ -70,9 +75,12 @@ class Lawyers extends Transfer
 
                 $term = get_term_by('name', 'Адвокат', $tax_slug);
 
-                $term_id = $term->term_id;
+                if ($term) {
 
-                wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
+                    $term_id = $term->term_id;
+
+                    wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
+                }
             }
 
             if (!is_null($post->id_topic)) {
@@ -81,11 +89,19 @@ class Lawyers extends Transfer
 
                 $term = get_term_by('name', $post->topic_name, $tax_slug);
 
-                $term_id = $term->term_id;
+                if ($term) {
 
-                wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
+                    $term_id = $term->term_id;
+
+                    wp_set_post_terms($post->id, [$term_id], $tax_slug, false);
+                }
             }
         }
+
+        $updated = parent::set_status(self::$post_type, 'Выполнено');
+
+        if (!$updated)
+            parent::show_error(null, var_dump($status));
     }
 
     public static function set_thumbs()
@@ -100,7 +116,7 @@ class Lawyers extends Transfer
 
     public static function actions()
     {
-        add_action('admin_action_' . 'lawyers' . '_get', function () {
+        add_action('admin_action_' . self::$post_type . '_get', function () {
 
             self::set();
 
@@ -109,7 +125,7 @@ class Lawyers extends Transfer
             exit();
         });
 
-        add_action('admin_action_' . 'lawyers' . '_set_thumbs', function () {
+        add_action('admin_action_' . self::$post_type . '_set_thumbs', function () {
 
             self::set_thumbs();
 
@@ -117,5 +133,44 @@ class Lawyers extends Transfer
 
             exit();
         });
+
+        add_action('admin_action_' . self::$post_type . '_delete', function () {
+
+            parent::delete(self::get(), self::$post_type);
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+    }
+
+    public static function page_block()
+    {
+        $data = [
+            'title' => 'Адвокаты',
+            'status' => parent::get_status(self::$post_type),
+            'forms' => [
+                [
+                    'title'  => 'Импорт',
+                    'desc'   => 'Импорт адвокатов и юристов, проставление таксономий',
+                    'btn'    => 'Импортировать',
+                    'action' => self::$post_type . '_get'
+                ],
+                [
+                    'title'  => 'Миниатюры',
+                    'desc'   => 'Скачать и установить миниатюры',
+                    'btn'    => 'Скачать',
+                    'action' => self::$post_type . '_set_thumbs'
+                ],
+                [
+                    'title'  => 'Очистка',
+                    'desc'   => 'Удаление записей, а так же привязки к таксономиям, комментариям и мета-полям',
+                    'btn'    => 'Удалить',
+                    'action' => self::$post_type . '_delete'
+                ]
+            ]
+        ];
+
+        return $data;
     }
 }

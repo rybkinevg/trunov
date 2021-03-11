@@ -30,7 +30,7 @@ function register_works()
         'menu_position'       => null,
         'menu_icon'           => 'dashicons-welcome-learn-more',
         'hierarchical'        => false,
-        'supports'            => ['title', 'editor', 'custom-fields'],
+        'supports'            => ['title', 'editor'],
         'taxonomies'          => [],
         'has_archive'         => true,
         'rewrite'             => true,
@@ -152,7 +152,7 @@ function fill_works_columns($column_name)
 {
     if ($column_name === 'work-url') {
 
-        $link = get_post_meta(get_the_ID(), 'work-url', true);
+        $link = carbon_get_post_meta(get_the_ID(), 'works-url');
 
         echo ($link) ? $link : '-';
     }

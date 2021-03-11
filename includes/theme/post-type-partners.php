@@ -74,31 +74,8 @@ function fill_partners_columns($column_name)
 
     if ($column_name === 'partners-url') {
 
-        $link = get_post_meta(get_the_ID(), 'url', true);
+        $link = carbon_get_post_meta(get_the_ID(), 'partners_url');
 
         echo ($link) ? $link : '-';
     }
 };
-
-/**
- * Мета поля
- */
-if (class_exists('Kama_Post_Meta_Box')) {
-
-    $args = [
-        'id'         => '_partners',
-        'title'      => 'Ссылка на партнёра',
-        'post_type'  => [
-            'partners'
-        ],
-        'fields'     => [
-            'url' => [
-                'type'  => 'url',
-                'title' => 'Ссылка',
-                'desc'  => 'Укажите ссылку на партнёра'
-            ],
-        ],
-    ];
-
-    new Kama_Post_Meta_Box($args);
-}

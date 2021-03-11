@@ -91,14 +91,14 @@ function create_post_taxes()
             'slug' => 'archive'
         ],
         [
-            'id'   => '400',
-            'name' => 'Телепередачи',
-            'slug' => 'tv'
-        ],
-        [
             'id'   => '403',
             'name' => 'Громкие дела',
             'slug' => 'high-profile-cases'
+        ],
+        [
+            'id'   => '447',
+            'name' => 'Темы',
+            'slug' => 'topics'
         ],
         [
             'id'   => '431',
@@ -111,9 +111,9 @@ function create_post_taxes()
             'slug' => '_services'
         ],
         [
-            'id'   => '447',
-            'name' => 'Темы',
-            'slug' => 'topics'
+            'id'   => '400',
+            'name' => 'Телепередачи',
+            'slug' => 'tv'
         ]
     ];
 

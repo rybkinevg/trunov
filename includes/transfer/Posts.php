@@ -32,6 +32,11 @@ class Posts extends Transfer
 
     public static function set()
     {
+        $status = parent::get_status(self::$post_type);
+
+        if ($status)
+            parent::show_error(null, 'Данные типа записи "' . self::$post_type . '" уже импортированы');
+
         global $wpdb;
 
         $posts = self::get();
@@ -72,6 +77,11 @@ class Posts extends Transfer
             if (is_wp_error($cat))
                 self::show_error($cat);
         }
+
+        $updated = parent::set_status(self::$post_type, 'Выполнено');
+
+        if (!$updated)
+            parent::show_error(null, var_dump($status));
     }
 
     protected static function get_taxes(): array
@@ -200,8 +210,8 @@ class Posts extends Transfer
                     self::set_service_meta($post->id, $post->name);
                 }
 
-                // Адвокаты в СМИ
-                if ($post->id_topic_dir == '431') {
+                // Адвокаты в СМИ или Телепередачи
+                if ($post->id_topic_dir == '431' || $post->id_topic_dir == '400') {
 
                     self::set_person_meta($post->id, $post->id_topic);
                 }
@@ -241,6 +251,9 @@ class Posts extends Transfer
             $data = $service->ID;
         } else {
 
+            if (in_array($service->ID, $data))
+                return;
+
             array_push($data, $service->ID);
         }
 
@@ -249,28 +262,36 @@ class Posts extends Transfer
 
     protected static function set_person_meta($post_id, $topic_id)
     {
-        $data = carbon_get_post_meta($post_id, 'persons');
-
         switch ($topic_id) {
 
             case '481':
-                // Алексеева Татьяна в СМИ - 15697
+                // Адвокаты в СМИ - Алексеева Татьяна в СМИ - 15697
                 $value = '15697';
                 break;
 
             case '572':
-                // Гололобов Дмитрий Владимирович в СМИ - 19374
+                // Адвокаты в СМИ - Гололобов Дмитрий Владимирович в СМИ - 19374
                 $value = '19374';
                 break;
 
             case '607':
-                // Игорь Трунов на Mediametrics - 15711
+                // Адвокаты в СМИ - Игорь Трунов на Mediametrics - 15711
                 $value = '15711';
                 break;
 
             case '477':
-                // Людмила Айвар на Mediametrics - 15710
+                // Адвокаты в СМИ - Людмила Айвар на Mediametrics - 15710
                 $value = '15710';
+                break;
+
+            case '401':
+                // Телепередачи - С участием Людмила Айвар - 15710
+                $value = '15710';
+                break;
+
+            case '402':
+                // Телепередачи - С участием Игоря Трунова - 15711
+                $value = '15711';
                 break;
 
             default:
@@ -282,17 +303,23 @@ class Posts extends Transfer
         // $topic_id == '583' Ступин Евгений в СМИ - нет ID, статус адвоката - на утверждении
         // $topic_id == '432' Комаровская Марианна в СМИ - нет ID, статус адвоката - на утверждении
 
-        if (is_null($value)) return;
+        if (is_null($value))
+            return;
+
+        $data = carbon_get_post_meta($post_id, 'persons');
 
         if (empty($data)) {
 
             $data = $value;
         } else {
 
+            if (in_array($value, $data))
+                return;
+
             array_push($data, $value);
         }
 
-        carbon_set_post_meta($post_id, 'person', $data);
+        carbon_set_post_meta($post_id, 'persons', $data);
     }
 
     public static function set_thumbs()
@@ -307,7 +334,7 @@ class Posts extends Transfer
 
     public static function actions()
     {
-        add_action('admin_action_' . 'news' . '_get', function () {
+        add_action('admin_action_' . self::$post_type . '_get', function () {
 
             self::set();
 
@@ -316,7 +343,7 @@ class Posts extends Transfer
             exit();
         });
 
-        add_action('admin_action_' . 'news' . '_set_taxes', function () {
+        add_action('admin_action_' . self::$post_type . '_set_taxes', function () {
 
             self::set_taxes();
 
@@ -325,7 +352,7 @@ class Posts extends Transfer
             exit();
         });
 
-        add_action('admin_action_' . 'news' . '_set_post_tax', function () {
+        add_action('admin_action_' . self::$post_type . '_set_post_tax', function () {
 
             self::set_post_tax();
 
@@ -334,7 +361,7 @@ class Posts extends Transfer
             exit();
         });
 
-        add_action('admin_action_' . 'news' . '_set_thumbs', function () {
+        add_action('admin_action_' . self::$post_type . '_set_thumbs', function () {
 
             self::set_thumbs();
 
@@ -342,5 +369,56 @@ class Posts extends Transfer
 
             exit();
         });
+
+        add_action('admin_action_' . self::$post_type . '_delete', function () {
+
+            parent::delete(self::get(), self::$post_type);
+
+            wp_redirect($_SERVER['HTTP_REFERER']);
+
+            exit();
+        });
+    }
+
+    public static function page_block()
+    {
+        $data = [
+            'title' => 'Пресс-центр',
+            'status' => parent::get_status(self::$post_type),
+            'forms' => [
+                [
+                    'title'  => 'Импорт',
+                    'desc'   => 'Импорт новостей, проставление категорий и таксономий',
+                    'btn'    => 'Импортировать',
+                    'action' => self::$post_type . '_get'
+                ],
+                [
+                    'title'  => 'Таксономии',
+                    'desc'   => 'Заполнение таксономий терминами',
+                    'btn'    => 'Заполнить',
+                    'action' => self::$post_type . '_set_taxes'
+                ],
+                [
+                    'title'  => 'Связь',
+                    'desc'   => 'Связать термины таксономий с записями и заполнить метаполя',
+                    'btn'    => 'Связать',
+                    'action' => self::$post_type . '_set_post_tax'
+                ],
+                [
+                    'title'  => 'Миниатюры',
+                    'desc'   => 'Скачать и установить миниатюры',
+                    'btn'    => 'Скачать',
+                    'action' => self::$post_type . '_set_thumbs'
+                ],
+                [
+                    'title'  => 'Очистка',
+                    'desc'   => 'Удаление записей, а так же привязки к таксономиям, комментариям и мета-полям',
+                    'btn'    => 'Удалить',
+                    'action' => self::$post_type . '_delete'
+                ]
+            ]
+        ];
+
+        return $data;
     }
 }

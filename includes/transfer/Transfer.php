@@ -157,6 +157,8 @@ class Transfer
         For_lawyer::actions();
         Media_columns::actions();
         SOS::actions();
+        Certificates::actions();
+        Vacancies::actions();
     }
 
     public static function generate_page()

@@ -45,6 +45,10 @@ function print_block($args)
 
     <h2><?php echo get_admin_page_title() ?></h2>
 
+    <p>Первым делом импортируются все типы записей, нельзя импортировать миниатюры и так далее, пока не заведены все записи.</p>
+    <p>Проблема заключается в том, что необходимо сохранить ID всех записей в Базе Данных в исходном виде, каждая скачанная картинка (миниатюра), может занять необходимый ID</p>
+    <p>Таксономии не влияют на основную таблицу в Базе данных. Так что их можно заводить, не опасаясь перебить или занять ID</p>
+
     <style>
         .container {
             display: grid;
@@ -143,6 +147,8 @@ function print_block($args)
     print_block(rybkinevg\trunov\For_lawyer::page_block());
     print_block(rybkinevg\trunov\Media_columns::page_block());
     print_block(rybkinevg\trunov\SOS::page_block());
+    print_block(rybkinevg\trunov\Certificates::page_block());
+    print_block(rybkinevg\trunov\Vacancies::page_block());
 
     ?>
 

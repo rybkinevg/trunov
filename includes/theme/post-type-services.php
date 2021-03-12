@@ -98,16 +98,16 @@ function create_services_categories()
 /**
  * Добавляет фильтр по таксономиям
  */
-// add_action('restrict_manage_posts', 'services_catalog_taxes_filter');
+add_action('restrict_manage_posts', 'services_taxes_filter');
 
-function services_catalog_taxes_filter()
+function services_taxes_filter()
 {
     global $typenow;
 
-    if ($typenow == 'services-catalog') {
+    if ($typenow == 'services') {
 
         $taxes = [
-            'services_catalog_categories'
+            'services_categories'
         ];
 
         foreach ($taxes as $tax) {

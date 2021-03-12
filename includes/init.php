@@ -20,6 +20,8 @@ require(dirname(__FILE__) . '/transfer/Media_columns.php');
 require(dirname(__FILE__) . '/transfer/Services.php');
 require(dirname(__FILE__) . '/transfer/Works.php');
 require(dirname(__FILE__) . '/transfer/SOS.php');
+require(dirname(__FILE__) . '/transfer/Certificates.php');
+require(dirname(__FILE__) . '/transfer/Vacancies.php');
 
 // Post types
 require(dirname(__FILE__) . '/theme/post-type-post.php');
@@ -32,6 +34,8 @@ require(dirname(__FILE__) . '/theme/post-type-media-columns.php');
 require(dirname(__FILE__) . '/theme/post-type-for-lawyer.php');
 require(dirname(__FILE__) . '/theme/post-type-services.php');
 require(dirname(__FILE__) . '/theme/post-type-sos.php');
+require(dirname(__FILE__) . '/theme/post-type-certificates.php');
+require(dirname(__FILE__) . '/theme/post-type-vacancies.php');
 
 // Includes
 require(dirname(__FILE__) . '/theme/meta-box-custom.php');

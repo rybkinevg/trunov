@@ -28,7 +28,7 @@ function register_court()
         'show_in_rest'        => null,
         'rest_base'           => null,
         'menu_position'       => null,
-        'menu_icon'           => 'dashicons-admin-multisite',
+        'menu_icon'           => 'dashicons-bank',
         'hierarchical'        => false,
         'supports'            => ['title', 'editor', 'thumbnail', 'custom-fields'],
         'taxonomies'          => [],

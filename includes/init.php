@@ -22,6 +22,7 @@ require(dirname(__FILE__) . '/transfer/Works.php');
 require(dirname(__FILE__) . '/transfer/SOS.php');
 require(dirname(__FILE__) . '/transfer/Certificates.php');
 require(dirname(__FILE__) . '/transfer/Vacancies.php');
+require(dirname(__FILE__) . '/transfer/Images.php');
 
 // Post types
 require(dirname(__FILE__) . '/theme/post-type-post.php');

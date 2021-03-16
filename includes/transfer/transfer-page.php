@@ -49,6 +49,12 @@ function print_block($args)
 	<p>Проблема заключается в том, что необходимо сохранить ID всех записей в Базе Данных в исходном виде, каждая скачанная картинка (миниатюра), может занять необходимый ID</p>
 	<p>Таксономии не влияют на основную таблицу в Базе данных. Так что их можно заводить, не опасаясь перебить или занять ID</p>
 
+	<p>Осталось:</p>
+	<ul>
+		<li>Ссылки</li>
+		<li>Вёрстка</li>
+	</ul>
+
 	<style>
 		.container {
 			display: grid;
@@ -136,6 +142,8 @@ function print_block($args)
 	</style>
 
 	<?php
+
+	// \rybkinevg\trunov\Images::set();
 
 	print_block(rybkinevg\trunov\Lawyers::page_block());
 	print_block(rybkinevg\trunov\Services::page_block());

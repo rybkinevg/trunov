@@ -45,17 +45,9 @@ class Images extends Transfer
 
             foreach ($imgs as $img) {
 
-                foreach ($img->attr as $key => $value) {
-
-                    if ($key == 'src') {
-
-                        $img->attr['src'] = self::download_image($img->attr['src'], $post->ID, $post->post_title);
-                    } elseif ($key == 'alt') {
-                        $img->attr['alt'] = "";
-                    } else {
-                        unset($img->attr[$key]);
-                    }
-                }
+                $img->attr['alt'] = "";
+                $img->attr['src'] = self::download_image($img->attr['src'], $post->ID);
+                $img->attr['class'] = 'aligncenter';
             }
 
             $new_content = $html->save();
@@ -68,8 +60,12 @@ class Images extends Transfer
         }
     }
 
-    protected static function download_image($url, $post_id, $post_title)
+    protected static function download_image($url, $post_id)
     {
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+
         $url = str_replace('\\', '/', $url);
 
         $url_to_arr = explode('/', $url);
@@ -81,17 +77,19 @@ class Images extends Transfer
 
         $url = implode('/', $url_to_arr);
 
-        $thumb_src = media_sideload_image($url, $post_id, $post_title, 'src');
+        $file_name = "post-img-{$post_id}";
+
+        $thumb_src = media_sideload_image($url, $post_id, $file_name, 'src');
 
         if (is_wp_error($thumb_src)) {
 
             $url = 'http://trunov.com/' . $url;
 
-            $thumb_src = media_sideload_image($url, $post_id, $post_title, 'src');
+            $thumb_src = media_sideload_image($url, $post_id, $file_name, 'src');
 
             if (is_wp_error($thumb_src)) {
 
-                $data = get_option('trunov_imported_images', '');
+                $data = get_option('trunov_not_imported_images', '');
 
                 if (empty($data)) {
 
@@ -104,7 +102,7 @@ class Images extends Transfer
                     array_push($data, $url);
                 }
 
-                update_option('trunov_imported_images', $data);
+                update_option('trunov_not_imported_images', $data);
             }
         }
 

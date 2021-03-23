@@ -1,0 +1,80 @@
+.management
+
+    &__item
+        display: flex
+
+        &:not(:last-child)
+            border-bottom: 1px solid $grey
+
+        @media ( max-width: 1200px )
+            flex-direction: column
+
+    &__info
+        display: flex
+        border-right: 1px solid $grey
+
+        @media ( max-width: 900px )
+            flex-direction: column
+
+    &__img
+        min-width: 300px
+
+    &__speech
+        position: relative
+        display: flex
+        align-items: center
+        justify-content: center
+        flex: 1 1 60%
+        padding: 40px
+        border-left: 10px solid $grey
+
+        @media ( max-width: 900px )
+            border-left: 0
+            border-top: 10px solid $grey
+
+        @media ( max-width: 500px )
+            padding: 40px 10px 10px 10px
+
+        &::before
+            $triangle-size: 20px
+            content: ''
+            display: block
+            position: absolute
+            top: 15%
+            left: -30px
+            width: 0
+            height: 0
+            border-top: $triangle-size solid transparent
+            border-bottom: $triangle-size solid transparent
+            border-right: $triangle-size solid $grey
+
+            @media ( max-width: 900px )
+                border-top: 0
+                border-bottom: $triangle-size solid $grey
+                border-right: $triangle-size solid transparent
+                border-left: $triangle-size solid transparent
+                top: -30px
+                left: 30px
+
+    &__blockquote
+
+        &::before
+            content: "\201C"
+            font-family: sans-serif
+            color: $grey
+            font-size: 70px
+            position: absolute
+            left: 15px
+            top: 5px
+
+    &__position
+        display: block
+        color: $darkgrey
+        margin-top: 10px
+
+    &__extra
+        display: flex
+        flex-direction: column
+        justify-content: center
+        min-width: 300px
+        padding: 20px

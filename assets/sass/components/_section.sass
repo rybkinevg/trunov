@@ -1,0 +1,51 @@
+.section
+    $section-padding: 30px
+    background: $white
+    margin-bottom: $section-padding
+
+    @media ( max-width: 700px )
+        margin-bottom: 20px
+
+    &__header
+        display: flex
+        align-items: center
+        background: $lightgrey
+
+        @media ( max-width: 700px )
+            background: $white
+
+        & h2
+            @media ( max-width: 700px )
+                font-size: 20px
+
+    &__title
+        background: $white
+        padding: $section-padding
+
+        @media ( max-width: 700px )
+            padding: 20px
+
+        &--dark
+            padding: $section-padding
+            color: $white
+            background: $darkgrey
+            width: 100%
+
+            @media ( max-width: 700px )
+                padding: 20px
+
+    &__inner
+        padding: $section-padding
+
+        @media ( max-width: 700px )
+            padding: 20px
+
+    &__links
+        margin-right: auto
+        color: $darkgrey
+
+        @media ( max-width: 700px )
+            display: none
+
+    &__link
+        margin-left: 20px

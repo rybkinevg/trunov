@@ -1,0 +1,47 @@
+.main-news
+    position: relative
+
+    & .section__inner
+        padding: 0
+
+    &__item
+        position: relative
+        display: flex
+        height: 500px
+        background-repeat: no-repeat
+        background-size: cover
+
+        @media ( max-width: 900px )
+            height: 350px
+
+    &__info
+        position: absolute
+        bottom: 0
+        left: 0
+        background: rgba(0, 0, 0, .4)
+        color: $white
+        padding: 40px
+
+        @media ( max-width: 900px )
+            padding: 10px
+            margin: 15px
+
+    &__title
+        margin-bottom: 20px
+        letter-spacing: 1px
+
+        @media ( max-width: 900px )
+            margin: 0
+
+    &__desc
+        @media ( max-width: 900px )
+            display: none
+
+    & .slider__arrows
+        position: absolute
+        top: 40px
+        left: 40px
+        background: transparent
+
+        & .slick-arrow
+            color: $white

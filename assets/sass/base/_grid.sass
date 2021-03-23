@@ -1,0 +1,50 @@
+$gap: 30px
+
+.row
+    display: flex
+    flex-wrap: wrap
+    margin-left: ($gap / 2) * -1
+    margin-right: ($gap / 2) * -1
+    justify-content: center
+
+    &.cols-1 .col
+        flex: 0 0 (100% / 12) * (12 / 1)
+    &.cols-2 .col
+        flex: 0 0 (100% / 12) * (12 / 2)
+    &.cols-3 .col
+        flex: 0 0 (100% / 12) * (12 / 3)
+    &.cols-4 .col
+        flex: 0 0 (100% / 12) * (12 / 4)
+    &.cols-5 .col
+        flex: 0 0 (100% / 12) * (12 / 5)
+    &.cols-6 .col
+        flex: 0 0 (100% / 12) * (12 / 6)
+    &.cols-7 .col
+        flex: 0 0 (100% / 12) * (12 / 7)
+    &.cols-8 .col
+        flex: 0 0 (100% / 12) * (12 / 8)
+    &.cols-9 .col
+        flex: 0 0 (100% / 12) * (12 / 9)
+    &.cols-10 .col
+        flex: 0 0 (100% / 12) * (12 / 10)
+    &.cols-11 .col
+        flex: 0 0 (100% / 12) * (12 / 11)
+    &.cols-12 .col
+        flex: 0 0 (100% / 12) * (12 / 12)
+
+.col
+    padding-left: ($gap / 2)
+    padding-right: ($gap / 2)
+    margin-bottom: $gap
+
+    &-content
+        width: 66.66666667%
+
+        @media (max-width: 900px)
+            width: 100%
+
+    &-sidebar
+        width: 33.33333333%
+
+        @media (max-width: 900px)
+            display: none

@@ -1,59 +1,59 @@
-<?php
-/**
- * The header for our theme
- *
- * This is the template that displays all of the <head> section and everything up until <div id="content">
- *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
- *
- * @package trunov
- */
+<!DOCTYPE html>
+<html lang="ru">
 
-?>
-<!doctype html>
-<html <?php language_attributes(); ?>>
 <head>
-	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="profile" href="https://gmpg.org/xfn/11">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Международная Юридическая фирма «Трунов, Айвар и партнеры»</title>
 
-	<?php wp_head(); ?>
+    <?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
-<div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'trunov' ); ?></a>
+<body class="body">
 
-	<header id="masthead" class="site-header">
-		<div class="site-branding">
-			<?php
-			the_custom_logo();
-			if ( is_front_page() && is_home() ) :
-				?>
-				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php
-			else :
-				?>
-				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-				<?php
-			endif;
-			$trunov_description = get_bloginfo( 'description', 'display' );
-			if ( $trunov_description || is_customize_preview() ) :
-				?>
-				<p class="site-description"><?php echo $trunov_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-			<?php endif; ?>
-		</div><!-- .site-branding -->
+    <div class="site-wrapper">
 
-		<nav id="site-navigation" class="main-navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'trunov' ); ?></button>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'menu-1',
-					'menu_id'        => 'primary-menu',
-				)
-			);
-			?>
-		</nav><!-- #site-navigation -->
-	</header><!-- #masthead -->
+        <header class="header">
+            <div class="header__top">
+                <div class="container">
+                    <a href="#" class="header__brand">
+                        <div class="header__logo">
+                            <img class="img logo" src="http://trunov.com/images/logo2.png" alt="">
+                        </div>
+                        <div class="header__about">
+                            <h1 class="header__name">
+                                «Трунов, Айвар и партнёры»
+                            </h1>
+                            <p class="header__desc">
+                                Международная Юридическая фирма, основаная в 2001 году
+                            </p>
+                        </div>
+                    </a>
+                    <div class="header__contacts">
+                        <ul>
+                            <li class="header__phone">8 499 158 29 17</li>
+                            <li class="header__phone">8 499 158 29 17</li>
+                            <li class="header__phone">8 499 158 29 17</li>
+                        </ul>
+                        <div class="header__mail">
+                            info@trunov.com
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header__bottom">
+                <div class="container">
+                    <?php get_template_part('template-parts/nav-menu'); ?>
+                    <button class="header__search">Поиск</button>
+                    <div class="header__search-block">
+                        <div class="container">
+                            <input type="search" name="seach" id="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">

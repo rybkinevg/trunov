@@ -1,0 +1,38 @@
+.slider
+
+    & .slick-track
+        display: flex
+
+    &__item
+        height: auto
+        outline: none
+
+    &__arrows
+        position: relative
+        display: flex
+
+        & .slick-arrow
+            font-size: 0
+            display: block
+            width: 84px
+            height: 48px
+            color: $grey
+            background: none
+            border: 1px solid $grey
+            transition: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)
+
+            &::before
+                font-family: "FontAwesome"
+                font-size: 15px
+                color: inherit
+
+        & .slick-prev
+            margin-right: 10px
+
+            &::before
+                content: "\f060"
+
+        & .slick-next
+
+            &::before
+                content: "\f061"

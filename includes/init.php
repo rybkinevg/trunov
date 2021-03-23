@@ -37,6 +37,8 @@ require(dirname(__FILE__) . '/theme/post-type-services.php');
 require(dirname(__FILE__) . '/theme/post-type-sos.php');
 require(dirname(__FILE__) . '/theme/post-type-certificates.php');
 require(dirname(__FILE__) . '/theme/post-type-vacancies.php');
+require(dirname(__FILE__) . '/theme/enqueue.php');
+require(dirname(__FILE__) . '/theme/loadmore.php');
 
 // Includes
 require(dirname(__FILE__) . '/theme/meta-box-custom.php');

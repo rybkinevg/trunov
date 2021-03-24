@@ -69,6 +69,14 @@ class Lawyers extends Transfer
                 parent::show_error($inserted, "<p>ID поста: {$post->id}</p>");
             }
 
+            if ($post->id == '15710' || $post->id == '15711') {
+
+                carbon_set_post_meta($post->id, 'status', 'head');
+            } else {
+
+                carbon_set_post_meta($post->id, 'status', 'staff');
+            }
+
             if ($post->parent_id == '109') {
 
                 $tax_slug = 'lawyers_tax';

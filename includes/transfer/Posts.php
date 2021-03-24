@@ -72,6 +72,9 @@ class Posts extends Transfer
             if ($post->parent_id == '115')
                 $cat_id = get_cat_ID('Новости');
 
+            if ($post->parent_id == '14820')
+                wp_set_post_tags($wpdb->insert_id, 'Анонс', true);
+
             $cat = wp_set_post_categories($wpdb->insert_id, $cat_id);
 
             if (is_wp_error($cat))

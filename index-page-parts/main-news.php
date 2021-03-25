@@ -35,7 +35,7 @@ $query = new WP_Query($args);
                                     <?= get_the_title(); ?>
                                 </h3>
                                 <div class="main-news__desc">
-                                    <?= get_the_excerpt(); ?>
+                                    <?= kama_excerpt(['maxchar' => 200, 'autop' => 0]);  ?>
                                 </div>
                             </div>
                         </a>

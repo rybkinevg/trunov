@@ -28,7 +28,7 @@ function rename_post_type_post_labels($labels)
         'items_list_navigation' => 'Навигация по списку новостей',
         'items_list'            => 'Список новостей',
         'menu_name'             => 'Пресс-центр',
-        'name_admin_bar'        => 'Новость', // пункте "добавить"
+        'name_admin_bar'        => 'Новость',
     ];
 
     return (object) array_merge((array) $labels, $new);

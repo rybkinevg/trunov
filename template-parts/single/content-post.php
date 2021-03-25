@@ -6,8 +6,39 @@
                 <h2 class="single__title">
                     <?= get_the_title(); ?>
                 </h2>
-                <div class="single__text">
+                <div class="single__props">
+                    <span class="single__date">
+                        <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                        <?= get_the_date('j F Y'); ?>
+                    </span>
+                    <span class="single__views">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                        Кол-во просмотров
+                    </span>
+                </div>
+                <div class="single__body">
                     <?= get_the_content(); ?>
+                </div>
+            </div>
+            <div class="single__item single__source">
+                <div>
+                    Источник: ...(мета поле, отображается только если заполнено)
+                </div>
+            </div>
+            <div class="single__share">
+                <div class="share">
+                    <div class="share__item">
+                        <i class="fa fa-vk" aria-hidden="true"></i>
+                    </div>
+                    <div class="share__item">
+                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </div>
+                    <div class="share__item">
+                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </div>
+                    <div class="share__item">
+                        <i class="fa fa-odnoklassniki" aria-hidden="true"></i>
+                    </div>
                 </div>
             </div>
         </div>

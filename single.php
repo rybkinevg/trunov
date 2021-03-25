@@ -9,7 +9,7 @@ while (have_posts()) {
 ?>
 
     <section class="section breadcrumbs">
-        Крошки
+        Главная / ...
     </section>
 
 <?php

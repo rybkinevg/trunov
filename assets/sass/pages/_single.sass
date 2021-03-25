@@ -1,4 +1,68 @@
 .single
 
     &__item
+        padding: 30px
         background: $white
+
+    & .col-content
+        position: relative
+
+    &__share
+        position: absolute
+        top: 0
+        left: -65px
+        width: 50px
+        height: 100%
+
+        @media ( max-width: 1600px )
+            position: static
+            margin-top: 20px
+            width: 100%
+
+        & .share
+            position: sticky
+            top: 30px
+
+            @media ( max-width: 1600px )
+                position: static
+                display: flex
+
+    &__props
+        display: flex
+        justify-content: space-between
+        margin: 20px 0
+        color: $middlegrey
+
+        & i
+            margin-right: 5px
+
+    &__sidebar
+        position: sticky
+        top: 30px
+
+    &__source
+        margin-top: 20px
+        border: 1px solid $grey
+
+    &__body
+        line-height: 1.5 !important
+
+        & img
+            display: block
+            width: 100% !important
+            height: auto !important
+
+        & iframe
+            display: block
+            width: 100% !important
+            height: 350px !important
+
+        & h2
+            margin-bottom: 10px
+
+        & p
+            margin-top: 0
+            margin-bottom: 20px
+
+            &:last-child
+                margin-bottom: 0

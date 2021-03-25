@@ -4,6 +4,7 @@ use rybkinevg\trunov\Transfer;
 
 // Vendor
 require(dirname(__FILE__) . '/vendor/taxonomy-thumb.php');
+require(dirname(__FILE__) . '/vendor/kama_excerpt.php');
 
 // Carbon Fields
 require(dirname(__FILE__) . '/carbon-fields/carbon-fields.php');
@@ -44,6 +45,8 @@ require(dirname(__FILE__) . '/theme/loadmore.php');
 require(dirname(__FILE__) . '/theme/trunov-get-post-taxes.php');
 require(dirname(__FILE__) . '/theme/trunov-get-post-meta.php');
 require(dirname(__FILE__) . '/theme/trunov-show-post-meta.php');
+require(dirname(__FILE__) . '/theme/change-templates-for-static-main-page.php');
+require(dirname(__FILE__) . '/theme/trunov-archive-page-title.php');
 
 // Includes
 require(dirname(__FILE__) . '/theme/meta-box-custom.php');

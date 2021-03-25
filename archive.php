@@ -1,51 +1,50 @@
 <?php
-/**
- * The template for displaying archive pages
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package trunov
- */
 
 get_header();
+
+if (have_posts()) {
+
+    $post_type = get_post_type();
+
 ?>
 
-	<main id="primary" class="site-main">
+    <section class="archive archive__<?= $post_type; ?>">
 
-		<?php if ( have_posts() ) : ?>
+        <h2 class="archive__title">
+            <?= trunov_archive_title($post_type); ?>
+        </h2>
 
-			<header class="page-header">
-				<?php
-				the_archive_title( '<h1 class="page-title">', '</h1>' );
-				the_archive_description( '<div class="archive-description">', '</div>' );
-				?>
-			</header><!-- .page-header -->
+        <div class="row">
+            <div class="col col-content">
+                <div class="archive__item archive__content">
 
-			<?php
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+                    <?php
 
-				/*
-				 * Include the Post-Type-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_type() );
+                    while (have_posts()) {
 
-			endwhile;
+                        the_post();
 
-			the_posts_navigation();
+                        get_template_part('template-parts/archive/content', $post_type);
+                    }
 
-		else :
+                    ?>
 
-			get_template_part( 'template-parts/content', 'none' );
+                </div>
+            </div>
+            <div class="col col-sidebar">
+                <div class="archive__item archive__sidebar">
+                    123
+                </div>
+            </div>
+        </div>
 
-		endif;
-		?>
-
-	</main><!-- #main -->
+    </section>
 
 <?php
-get_sidebar();
+
+} else {
+
+    get_template_part('template-parts/archive/content', 'none');
+}
+
 get_footer();

@@ -57,9 +57,23 @@ $query = new WP_Query($args);
                             <h3 class="news__title">
                                 <?= get_the_title(); ?>
                             </h3>
-                            <div class="news__excerpt">
-                                <?= get_the_excerpt(); ?>
-                            </div>
+
+                            <?php
+
+                            if (iconv_strlen(get_the_title(), 'UTF-8') < 130) {
+
+                            ?>
+
+                                <div class="news__excerpt">
+                                    <?= kama_excerpt(['maxchar' => 200, 'autop' => 0]);  ?>
+                                </div>
+
+                            <?php
+
+                            }
+
+                            ?>
+
                         </a>
                     </div>
 

@@ -39,5 +39,12 @@ function trunov_get_post_meta($post_id, $meta, $title = '', $post_type = 'post')
         wp_reset_postdata();
     }
 
+    foreach ($trunov_post_meta as $key => $value) {
+
+        // Очистка итогового массива от пустых мета полей
+        if (empty($value['meta']))
+            unset($trunov_post_meta[$key]);
+    }
+
     return $trunov_post_meta;
 }

@@ -79,6 +79,27 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    $('button#posts_filter_submit').on('click', function (e) {
+
+        console.log('start');
+
+        e.preventDefault();
+
+        const data = $('form#posts_filter_form').serialize();
+
+        $.ajax({
+            url: ajax.url,
+            data: data,
+            type: 'POST',
+            success: function (data) {
+
+                $('ul.archive__list').html(data);
+
+                console.log('done');
+            }
+        });
+    });
+
     // const showMoreBtn = $(".show-more__btn");
     // showMoreBtn.on("click", showHiddenContent);
     // function showHiddenContent() {

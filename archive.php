@@ -44,29 +44,13 @@ if (have_posts()) {
             </div>
             <div class="col col-sidebar">
                 <div class="archive__item archive__sidebar">
-                    <div class="sidebar__item">
-                        <form id="posts_filter_form" class="form">
-                            <input type="hidden" name="action" value="filter_posts">
 
-                            <?php
+                    <?php
 
-                            $taxonomies = get_taxonomies();
+                    get_template_part('template-parts/archive/sidebar', $post_type);
 
-                            foreach ($taxonomies as $taxonomy) {
+                    ?>
 
-                                $tax_obj = get_taxonomy($taxonomy);
-
-                                if (in_array('post', $tax_obj->object_type) && $taxonomy != 'post_format') {
-
-                                    echo "<div class='form__item'>" . trunov_get_select_posts_filter($tax_obj->labels->name, $taxonomy) . '</div>';
-                                }
-                            }
-
-                            ?>
-
-                            <button id="posts_filter_submit" type="submit">Фильтр</button>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>

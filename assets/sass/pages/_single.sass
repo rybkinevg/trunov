@@ -18,6 +18,7 @@
             position: static
             margin-top: 20px
             width: 100%
+            height: auto
 
         & .share
             position: sticky
@@ -42,7 +43,38 @@
 
     &__source
         margin-top: 20px
-        border: 1px solid $grey
+
+    &__taxes
+        margin-top: 20px
+
+    &__tax
+        display: flex
+
+        &:not(:last-child)
+            margin-bottom: 15px
+            padding-bottom: 15px
+            border-bottom: 1px solid $grey
+
+    &__tax-name
+        margin-right: 5px
+        color: $middlegrey
+
+        &::after
+            content: ':'
+
+    &__terms
+        display: flex
+        flex-wrap: wrap
+
+    &__term
+        display: flex
+        font-style: italic
+
+        &:not(:last-child)
+            margin-right: 5px
+
+            &::after
+                content: ','
 
     &__body
         line-height: 1.5 !important

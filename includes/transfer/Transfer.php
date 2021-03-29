@@ -99,14 +99,16 @@ class Transfer
 
             if (is_wp_error($try_thumb_id)) {
 
-                $message = "
-                    <p>ID поста: {$post_id}</p>
-                    <p>Переданная ссылка: {$thumb_url}</p>
-                    <p>Конвертированная ссылка: {$url}</p>
-                    <p>Повторно конвертированная ссылка: {$try_this_url}</p>
-                ";
+                return;
 
-                self::show_error($try_this_url, $message);
+                // $message = "
+                //     <p>ID поста: {$post_id}</p>
+                //     <p>Переданная ссылка: {$thumb_url}</p>
+                //     <p>Конвертированная ссылка: {$url}</p>
+                //     <p>Повторно конвертированная ссылка: {$try_this_url}</p>
+                // ";
+
+                // self::show_error($try_thumb_id, $message);
             }
 
             $thumb_id = $try_thumb_id;

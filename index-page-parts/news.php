@@ -51,7 +51,7 @@ $query = new WP_Query($args);
                     <div class="slider__item">
                         <a href="<?= get_the_permalink(); ?>" class="news__item">
                             <div class="news__img">
-                                <img src="<?= get_the_post_thumbnail_url(); ?>" alt="" class="img img--cover">
+                                <?= trunov_get_thumbnail(); ?>
                             </div>
                             <span class="news__date"><?= get_the_date('j F Y'); ?></span>
                             <h3 class="news__title">

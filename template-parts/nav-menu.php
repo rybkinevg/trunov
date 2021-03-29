@@ -1,20 +1,20 @@
 <nav class="nav header__nav">
     <ul class="nav__list">
         <li class="nav__item">
-            <a href="#" class="nav__link">Пресс-центр</a>
+            <a href="/press-centr" class="nav__link">Пресс-центр</a>
             <button class="nav__btn--submenu"></button>
             <ul class="submenu">
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Новости</a>
+                    <a class="submenu__link" href="/news">Новости</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Новости СМИ</a>
+                    <a class="submenu__link" href="/news_smi">Новости СМИ</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Фотоархив</a>
+                    <a class="submenu__link" href="/archive/photoarhiv">Фотоархив</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Видеоархив</a>
+                    <a class="submenu__link" href="/archive/video-arhiv">Видеоархив</a>
                 </li>
             </ul>
         </li>
@@ -23,25 +23,25 @@
             <button class="nav__btn--submenu"></button>
             <ul class="submenu">
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Физическим лицам</a>
+                    <a class="submenu__link" href="/services/fizicheskim-licam">Физическим лицам</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Юридическим лицам</a>
+                    <a class="submenu__link" href="/services/juridicheskim-licam">Юридическим лицам</a>
                 </li>
             </ul>
         </li>
         <li class="nav__item">
-            <a href="#" class="nav__link">Адвокаты</a>
+            <a href="/lawyers" class="nav__link">Адвокаты</a>
         </li>
         <li class="nav__item">
-            <a href="#" class="nav__link">Громкие дела</a>
+            <a href="/high-profile-cases" class="nav__link">Громкие дела</a>
             <button class="nav__btn--submenu"></button>
             <ul class="submenu">
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Дела жертв авикатастроф</a>
+                    <a class="submenu__link" href="/high-profile-cases">Дела жертв авикатастроф</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Полицейские против подростка</a>
+                    <a class="submenu__link" href="/high-profile-cases">Полицейские против подростка</a>
                 </li>
             </ul>
         </li>

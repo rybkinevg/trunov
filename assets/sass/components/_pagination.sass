@@ -1,0 +1,24 @@
+.pagination
+    background: #fff
+    padding: 30px
+
+    & .screen-reader-text
+        display: none
+
+    & .nav-links
+        display: flex
+        justify-content: center
+        align-items: center
+        background: #ffffff
+
+    & .page-numbers
+        padding: 5px
+        border-radius: 5px
+
+        &:not(:last-child)
+            margin-right: 10px
+
+    & .page-numbers.current
+        color: #ffffff
+        background: $primary
+        font-weight: 600

@@ -17,7 +17,7 @@
         <header class="header">
             <div class="header__top">
                 <div class="container">
-                    <a href="#" class="header__brand">
+                    <a href="/" class="header__brand">
                         <div class="header__logo">
                             <img class="img logo" src="http://trunov.com/images/logo2.png" alt="">
                         </div>

@@ -6,34 +6,30 @@ function trunov_show_post_meta($post_meta_data)
 
 ?>
 
-        <div class="sidebar__item">
-            <h2 class="sidebar__title">
-                <?= $title; ?>
-            </h2>
-            <div class="sidebar__content">
-                <ul class="sidebar__list">
+        <div class="single__tax">
+            <span class="single__tax-name"><?= $title; ?></span>
+            <ul class="single__terms">
 
-                    <?php
+                <?php
 
-                    foreach ($post_meta as $post_meta_item) {
+                foreach ($post_meta as $post_meta_item) {
 
-                        foreach ($post_meta_item as $meta) {
+                    foreach ($post_meta_item as $meta) {
 
-                    ?>
+                ?>
 
-                            <li class="sidebar__list-item">
-                                <a href="<?= $meta['link'] ?>"><?= $meta['name'] ?></a>
-                            </li>
+                        <li class="single__term">
+                            <a href="<?= $meta['link'] ?>"><?= $meta['name'] ?></a>
+                        </li>
 
-                    <?php
+                <?php
 
-                        }
                     }
+                }
 
-                    ?>
+                ?>
 
-                </ul>
-            </div>
+            </ul>
         </div>
 
 <?php

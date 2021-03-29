@@ -20,11 +20,13 @@
                     <?= get_the_content(); ?>
                 </div>
             </div>
+
             <div class="single__item single__source">
                 <div>
                     Источник: ...(мета поле, отображается только если заполнено)
                 </div>
             </div>
+
             <div class="single__share">
                 <div class="share">
                     <div class="share__item">
@@ -41,10 +43,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col col-sidebar">
-            <div class="single__item single__sidebar">
 
+            <div class="single__item single__taxes">
                 <?php
 
                 $post_taxes = trunov_get_post_taxes(get_the_ID());
@@ -60,6 +60,13 @@
                 trunov_show_post_meta($post_meta_services);
 
                 ?>
+            </div>
+
+        </div>
+        <div class="col col-sidebar">
+            <div class="single__item single__sidebar">
+
+                Здесь новости с миниатюрой
 
             </div>
         </div>

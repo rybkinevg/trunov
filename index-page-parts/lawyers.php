@@ -3,21 +3,7 @@
 $args = [
     'post_type'      => 'lawyers',
     'posts_per_page' => -1,
-    'post_status'    => 'publish',
-    'meta_query'     => [
-        [
-            'key'     => '_status',
-            'value'   => 'staff',
-            'compare' => '='
-        ]
-    ],
-    'tax_query'      => [
-        [
-            'taxonomy' => 'lawyers_tax',
-            'field'    => 'slug',
-            'terms'    => 'advocat'
-        ]
-    ]
+    'post_status'    => 'publish'
 ];
 
 $query = new WP_Query($args);

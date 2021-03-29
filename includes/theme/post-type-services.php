@@ -6,6 +6,7 @@
 
 $post_type_name = 'services';
 
+add_action('init', 'create_services_categories');
 add_action('init', 'register_services');
 
 function register_services()
@@ -37,7 +38,7 @@ function register_services()
         'menu_icon'           => 'dashicons-megaphone',
         'hierarchical'        => true,
         'supports'            => ['title', 'editor', 'page-attributes'],
-        'taxonomies'          => [],
+        'taxonomies'          => ['services_categories'],
         'has_archive'         => true,
         'rewrite'             => true,
         'query_var'           => true,
@@ -46,7 +47,7 @@ function register_services()
     register_post_type($post_type_name, $args);
 }
 
-add_action('init', 'create_services_categories');
+// add_action('init', 'create_services_categories');
 
 function create_services_categories()
 {
@@ -71,7 +72,11 @@ function create_services_categories()
         'meta_box_cb'           => 'post_categories_meta_box',
         'show_admin_column'     => true,
         'show_in_rest'          => true,
-        'default_term'          => $default_term
+        'default_term'          => $default_term,
+        'rewrite'               => [
+            'slug' => '/services/test',
+            'with_front' => true
+        ]
     ];
 
     register_taxonomy($tax_name, $post_types, $args);

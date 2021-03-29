@@ -543,7 +543,10 @@ class Posts extends Transfer
 
         foreach ($posts as $post) {
 
-            parent::set_post_thumb($post->id, $post->url_img);
+            if ($post->url_img) {
+
+                parent::set_post_thumb($post->id, $post->url_img);
+            }
         }
     }
 

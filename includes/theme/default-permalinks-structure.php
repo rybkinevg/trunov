@@ -9,4 +9,4 @@ function default_permalinks_structure()
     $wp_rewrite->set_permalink_structure($structure);
 }
 
-add_action('init', 'default_permalinks_structure');
+// add_action('init', 'default_permalinks_structure');

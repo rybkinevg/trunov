@@ -87,6 +87,8 @@ jQuery(document).ready(function ($) {
 
         const data = $('form#posts_filter_form').serialize();
 
+        console.log(data + '&123213');
+
         $.ajax({
             url: ajax.url,
             data: data,
@@ -95,7 +97,7 @@ jQuery(document).ready(function ($) {
 
                 $('ul.archive__list').html(data);
 
-                console.log('done');
+                console.log('done posts');
             }
         });
     });

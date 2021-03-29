@@ -41,6 +41,8 @@ Container::make('post_meta', 'Дополнительные поля')
     ->show_on_post_type('post')
     ->add_fields(
         [
+            Field::make('text', 'source', 'Источник')
+                ->set_help_text('Укажите ссылку на источник, если таковой имеется'),
             Field::make('multiselect', 'persons', 'Персоны')
                 ->set_options($person_arr)
                 ->set_help_text('Выберите одного или несколько адвокатов, упомянутых в новости'),

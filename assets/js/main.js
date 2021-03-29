@@ -17,21 +17,21 @@ jQuery(document).ready(function ($) {
 
     $('.news .slider').slick({
         appendArrows: $('.news .slider__arrows'),
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: 4,
+        slidesToScroll: 4,
         responsive: [
             {
-                breakpoint: 1000,
+                breakpoint: 1300,
                 settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2
+                    slidesToShow: 3,
+                    slidesToScroll: 3
                 }
             },
             {
-                breakpoint: 800,
+                breakpoint: 900,
                 settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
+                    slidesToShow: 2,
+                    slidesToScroll: 2
                 }
             },
             {

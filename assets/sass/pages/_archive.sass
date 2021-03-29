@@ -5,6 +5,14 @@
         background: $white
         margin-bottom: 30px
 
+    &__list-item:not(.archive__lawyers-head) .archive__img
+        @media ( max-width: 700px )
+            display: none
+
+    &__lawyers-head .archive__img
+        @media ( max-width: 700px )
+            height: 250px
+
     &__item
         background: $white
         padding: 30px

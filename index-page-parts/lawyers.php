@@ -3,7 +3,14 @@
 $args = [
     'post_type'      => 'lawyers',
     'posts_per_page' => -1,
-    'post_status'    => 'publish'
+    'post_status'    => 'publish',
+    'meta_query'     => [
+        [
+            'key' => 'status',
+            'value' => ['head'],
+            'compare' => 'NOT IN'
+        ],
+    ]
 ];
 
 $query = new WP_Query($args);

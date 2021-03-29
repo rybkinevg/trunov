@@ -49,6 +49,7 @@ require(dirname(__FILE__) . '/theme/change-templates-for-static-main-page.php');
 require(dirname(__FILE__) . '/theme/trunov-archive-page-title.php');
 require(dirname(__FILE__) . '/theme/trunov-thumbnails.php');
 require(dirname(__FILE__) . '/theme/trunov-posts-filter.php');
+require(dirname(__FILE__) . '/theme/trunov-get-share-url.php');
 
 // Includes
 require(dirname(__FILE__) . '/theme/meta-box-custom.php');

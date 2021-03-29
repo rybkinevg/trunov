@@ -20,6 +20,18 @@ foreach ($posts as $post) {
 
 wp_reset_postdata();
 
+Container::make('post_meta', 'Информация')
+    ->show_on_post_type('lawyers')
+    ->add_fields(
+        [
+            Field::make('complex', 'info', 'Информационный блок')
+                ->add_fields(array(
+                    Field::make('text', 'title', 'Заголовок блока'),
+                    Field::make('rich_text', 'text', 'Описание'),
+                ))
+        ]
+    );
+
 Container::make('post_meta', 'Дополнительные поля')
     ->show_on_post_type('lawyers')
     ->add_fields(

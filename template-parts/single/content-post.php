@@ -21,26 +21,39 @@
                 </div>
             </div>
 
-            <div class="single__item single__source">
-                <div>
-                    Источник: ...(мета поле, отображается только если заполнено)
+            <?php
+
+            $source_link = carbon_get_post_meta(get_the_ID(), 'source') ?: '';
+
+            if ($source_link) {
+
+            ?>
+
+                <div class="single__item single__source">
+                    <i class="fa fa-link" aria-hidden="true"></i>
+                    <a href="<?= $source_link; ?>" class="single__source-link" target="_blank" rel="noopener noreferrer">Источник</a>
                 </div>
-            </div>
+
+            <?php
+
+            }
+
+            ?>
 
             <div class="single__share">
                 <div class="share">
-                    <div class="share__item">
+                    <a href="<?= trunov_get_share_url('vkontakte'); ?>" class="share__item">
                         <i class="fa fa-vk" aria-hidden="true"></i>
-                    </div>
-                    <div class="share__item">
+                    </a>
+                    <a href="<?= trunov_get_share_url('facebook'); ?>" class="share__item">
                         <i class="fa fa-facebook" aria-hidden="true"></i>
-                    </div>
-                    <div class="share__item">
+                    </a>
+                    <a href="<?= trunov_get_share_url('twitter'); ?>" class="share__item">
                         <i class="fa fa-twitter" aria-hidden="true"></i>
-                    </div>
-                    <div class="share__item">
+                    </a>
+                    <a href="<?= trunov_get_share_url('odnoklassniki'); ?>" class="share__item">
                         <i class="fa fa-odnoklassniki" aria-hidden="true"></i>
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -66,7 +79,54 @@
         <div class="col col-sidebar">
             <div class="single__item single__sidebar">
 
-                Здесь новости с миниатюрой
+                <?php
+
+                $args = [
+                    'post_type'      => 'post',
+                    'posts_per_page' => 5,
+                    'post_status'    => 'publish',
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                    'post__not_in'   => [get_the_ID()]
+                ];
+
+                $query = new WP_Query($args);
+
+                if ($query->have_posts()) {
+
+                ?>
+
+                    <h2 class="sidebar__title">Последние новости</h2>
+
+                    <ul class="single__post-list">
+
+                        <?php
+
+                        while ($query->have_posts()) {
+
+                            $query->the_post();
+
+                        ?>
+
+                            <li class="single__post-item">
+                                <a href="<?= get_the_permalink() ?>" class="single__post-img">
+                                    <?= trunov_get_thumbnail(); ?>
+                                </a>
+                                <a href="<?= get_the_permalink() ?>" class="single__post-title">
+                                    <?= strip_tags(kama_excerpt(['text' => get_the_title(), 'maxchar' => 80])); ?>
+                                </a>
+                            </li>
+
+                    <?php
+
+                        }
+                    }
+
+                    wp_reset_postdata();
+
+                    ?>
+
+                    </ul>
 
             </div>
         </div>

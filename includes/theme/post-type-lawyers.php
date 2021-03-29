@@ -226,3 +226,38 @@ function fill_lawyers_columns($column_name)
         echo $thumbnail;
     }
 };
+
+add_filter('pre_get_posts', 'change_lawyers_order');
+
+function change_lawyers_order($query)
+{
+    if (is_post_type_archive('lawyers')) {
+
+        $query->set(
+            'meta_query',
+            [
+                'relation' => 'OR',
+                'management' => [
+                    'key'   => 'status',
+                    'value' => 'head',
+                    'compare' => '='
+                ],
+                'staff' => [
+                    'key'   => 'status',
+                    'value' => 'head',
+                    'compare' => '!='
+                ],
+            ]
+        );
+
+        $query->set(
+            'orderby',
+            [
+                'management' => 'ASC',
+                'date'       => 'ASC',
+            ]
+        );
+    }
+
+    return $query;
+}

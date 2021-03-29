@@ -73,10 +73,6 @@ function create_services_categories()
         'show_admin_column'     => true,
         'show_in_rest'          => true,
         'default_term'          => $default_term,
-        'rewrite'               => [
-            'slug' => '/services/test',
-            'with_front' => true
-        ]
     ];
 
     register_taxonomy($tax_name, $post_types, $args);

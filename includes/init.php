@@ -40,8 +40,8 @@ require(dirname(__FILE__) . '/theme/post-type-certificates.php');
 require(dirname(__FILE__) . '/theme/post-type-vacancies.php');
 require(dirname(__FILE__) . '/theme/post-type-offices.php');
 require(dirname(__FILE__) . '/theme/enqueue.php');
-require(dirname(__FILE__) . '/theme/loadmore.php');
 
+require(dirname(__FILE__) . '/theme/showmore.php');
 require(dirname(__FILE__) . '/theme/trunov-get-post-taxes.php');
 require(dirname(__FILE__) . '/theme/trunov-get-post-meta.php');
 require(dirname(__FILE__) . '/theme/trunov-show-post-meta.php');

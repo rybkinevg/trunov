@@ -21,15 +21,23 @@
                 </div>
             </div>
 
-            <div class="single__item single__taxes">
-                <?php
+            <?php
 
-                $post_taxes = trunov_get_post_taxes(get_the_ID());
+            $post_taxes = trunov_get_post_taxes(get_the_ID());
 
-                trunov_show_post_meta($post_taxes);
+            if (!empty($post_taxes)) {
 
-                ?>
-            </div>
+            ?>
+
+                <div class="single__item single__taxes">
+                    <?php trunov_show_post_meta($post_taxes); ?>
+                </div>
+
+            <?php
+
+            }
+
+            ?>
 
         </div>
         <!-- <div class="col col-sidebar">

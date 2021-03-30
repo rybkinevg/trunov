@@ -29,16 +29,16 @@ $query = new WP_Query($args);
             ?>
 
                     <div class="slider__item">
-                        <a class="main-news__item" style="background-image: url(<?= get_the_post_thumbnail_url(); ?>);">
+                        <div class="main-news__item" style="background-image: url(<?= get_the_post_thumbnail_url(); ?>);">
                             <div class="main-news__info">
                                 <h3 class="main-news__title">
-                                    <?= get_the_title(); ?>
+                                    <a href="<?= get_the_permalink(); ?>"><?= get_the_title(); ?></a>
                                 </h3>
                                 <div class="main-news__desc">
                                     <?= kama_excerpt(['maxchar' => 200, 'autop' => 0]);  ?>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
 
             <?php

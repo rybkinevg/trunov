@@ -19,14 +19,14 @@
             </ul>
         </li>
         <li class="nav__item">
-            <a href="#" class="nav__link">Услуги</a>
+            <a href="/services" class="nav__link">Услуги</a>
             <button class="nav__btn--submenu"></button>
             <ul class="submenu">
                 <li class="submenu__item">
-                    <a class="submenu__link" href="/services/fizicheskim-licam">Физическим лицам</a>
+                    <a class="submenu__link" href="/services_categories/fizicheskim-licam">Физическим лицам</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="/services/juridicheskim-licam">Юридическим лицам</a>
+                    <a class="submenu__link" href="/services_categories/juridicheskim-licam">Юридическим лицам</a>
                 </li>
             </ul>
         </li>
@@ -34,14 +34,14 @@
             <a href="/lawyers" class="nav__link">Адвокаты</a>
         </li>
         <li class="nav__item">
-            <a href="/high-profile-cases" class="nav__link">Громкие дела</a>
+            <a href="#" class="nav__link">Громкие дела</a>
             <button class="nav__btn--submenu"></button>
             <ul class="submenu">
                 <li class="submenu__item">
-                    <a class="submenu__link" href="/high-profile-cases">Дела жертв авикатастроф</a>
+                    <a class="submenu__link" href="/high-profile-cases/dela-zhertv-aviakatastrof">Дела жертв авикатастроф</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="/high-profile-cases">Полицейские против подростка</a>
+                    <a class="submenu__link" href="/high-profile-cases/policejskie-protiv-podrostka">Полицейские против подростка</a>
                 </li>
             </ul>
         </li>
@@ -53,18 +53,18 @@
                     <a class="submenu__link" href="#">Регистрационные свидетельства</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Адвокату</a>
+                    <a class="submenu__link" href="/for-lawyer">Адвокату</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Реквизиты судов</a>
+                    <a class="submenu__link" href="/court">Реквизиты судов</a>
                 </li>
                 <li class="submenu__item">
-                    <a class="submenu__link" href="#">Научные статьи</a>
+                    <a class="submenu__link" href="/works">Научные статьи</a>
                 </li>
             </ul>
         </li>
         <li class="nav__item">
-            <a href="#" class="nav__link">Вакансии</a>
+            <a href="/vacancies" class="nav__link">Вакансии</a>
         </li>
         <li class="nav__item">
             <a href="#" class="nav__link">Контакты</a>

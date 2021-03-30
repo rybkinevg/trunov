@@ -1,52 +1,20 @@
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php
-		if (is_singular()) :
-			the_title('<h1 class="entry-title">', '</h1>');
-		else :
-			the_title('<h2 class="entry-title"><a href="' . esc_url(get_permalink()) . '" rel="bookmark">', '</a></h2>');
-		endif;
-
-		if ('post' === get_post_type()) :
-		?>
-			<div class="entry-meta">
-				<?php
-				trunov_posted_on();
-				trunov_posted_by();
-				?>
-			</div><!-- .entry-meta -->
-		<?php endif; ?>
-	</header><!-- .entry-header -->
-
-	<?php trunov_post_thumbnail(); ?>
-
-	<div class="entry-content">
-		<?php
-		the_content(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__('Continue reading<span class="screen-reader-text"> "%s"</span>', 'trunov'),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				wp_kses_post(get_the_title())
-			)
-		);
-
-		wp_link_pages(
-			array(
-				'before' => '<div class="page-links">' . esc_html__('Pages:', 'trunov'),
-				'after'  => '</div>',
-			)
-		);
-		?>
-	</div><!-- .entry-content -->
-
-	<footer class="entry-footer">
-		<?php trunov_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
-</article><!-- #post-<?php the_ID(); ?> -->
+<li class="archive__list-item">
+	<article class="archive__article">
+		<div class=" archive__info">
+			<span class="archive__date">
+				<?= get_the_date('j F Y'); ?>
+			</span>
+			<h3 class="archive__title">
+				<a href="<?= get_the_permalink(); ?>">
+					<?= get_the_title(); ?>
+				</a>
+			</h3>
+			<p class="archive__excerpt">
+				<?= kama_excerpt(['maxchar' => 250, 'autop' => 0]); ?>
+			</p>
+		</div>
+		<a href="<?= get_the_permalink(); ?>" class="archive__img">
+			<?= trunov_get_thumbnail(); ?>
+		</a>
+	</article>
+</li>

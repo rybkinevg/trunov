@@ -49,34 +49,55 @@ jQuery(document).ready(function ($) {
 
     $('button.show-more__btn').click(function () {
 
+        // Нажатая кнопка
         const btn = $(this);
 
-        btn.text('Загружаю...'); // изменяем текст кнопки, вы также можете добавить прелоадер
+        // Блок postview
+        const postviewBlock = btn.parent().parent().find('.postview');
 
-        const offset = btn.data('offset');
-        const posttype = btn.data('posttype');
+        if (btn.data('ajax') == true) {
 
-        const data = {
-            'action': 'loadmore',
-            'query': loadmore[posttype],
-            'offset': offset,
-            'posttype': posttype,
-        };
+            btn.text('Загрузка');
 
-        $.ajax({
-            url: ajax.url,
-            data: data,
-            type: 'POST',
-            success: function (data) {
-                if (data) {
+            const postType = btn.data('posttype');
+            const query = btn.data('query');
+            const offset = btn.data('offset');
 
-                    btn.text('Свернуть').parent().prev().find('.row').append(data); // вставляем новые посты
-                } else {
+            const data = {
+                'action': 'showmore',
+                'query': query,
+                'posttype': postType,
+            };
 
-                    $('#true_loadmore').remove(); // если мы дошли до последней страницы постов, скроем кнопку
+            $.ajax({
+                url: ajax.url,
+                data: data,
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+
+                        btn.data('ajax', false);
+
+                        btn.text('Свернуть').parent().prev().after("<div class='postview'><div class='row cols-" + offset + "'>" + data + "</div></div>");
+                        btn.parent().parent().find('.postview').slideDown(300).addClass('open')
+                    } else {
+
+                        $('#true_loadmore').remove(); // если мы дошли до последней страницы постов, скроем кнопку
+                    }
                 }
+            });
+        } else {
+
+            if (postviewBlock.hasClass('open')) {
+
+                postviewBlock.slideUp(300).removeClass('open');
+                btn.text('Показать больше');
+            } else {
+
+                postviewBlock.slideDown(300).addClass('open');
+                btn.text('Свернуть');
             }
-        });
+        }
     });
 
     $('button#posts_filter_submit').on('click', function (e) {
@@ -101,18 +122,5 @@ jQuery(document).ready(function ($) {
             }
         });
     });
-
-    // const showMoreBtn = $(".show-more__btn");
-    // showMoreBtn.on("click", showHiddenContent);
-    // function showHiddenContent() {
-
-    //     let hiddenContent = $(this).parent().prev();
-    //     hiddenContent.slideToggle({
-    //         duration: 300,
-    //         start: function () {
-    //             $(this).css("display", "flex");
-    //         }
-    //     });
-    // }
 
 });

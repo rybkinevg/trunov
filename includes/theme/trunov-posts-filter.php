@@ -5,7 +5,7 @@ function trunov_get_select_posts_filter($title = 'Рубрики', $taxonomy_slu
     $args = [
         'show_option_all' => 'Все',
         'echo'            => 0,
-        'class'           => 'form__select',
+        'class'           => 'form__select select',
         'name'            => $taxonomy_slug,
         'taxonomy'        => $taxonomy_slug
     ];

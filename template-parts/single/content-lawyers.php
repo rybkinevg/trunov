@@ -52,7 +52,11 @@ $info = carbon_get_post_meta(get_the_ID(), 'info') ?: '';
             </div>
         </div>
         <div class="col col-sidebar">
-            <div class="single__item single__sidebar">321</div>
+            <?php
+
+            get_template_part('template-parts/single/sidebar', get_post_type());
+
+            ?>
         </div>
     </div>
 

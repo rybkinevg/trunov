@@ -76,8 +76,8 @@ $query = new WP_Query($args);
                 ?>
             </div>
         </div>
-    </div>
-    <div class="show-more">
-        <button class="show-more__btn">Показать больше (ajax)</button>
+        <div class="show-more">
+            <button class="show-more__btn" data-ajax="true" data-posttype="services" data-offset="4" data-query='<?= serialize($args); ?>'>Показать больше</button>
+        </div>
     </div>
 </section>

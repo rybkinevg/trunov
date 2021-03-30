@@ -2,7 +2,7 @@
 
 $args = [
     'post_type'      => 'lawyers',
-    'posts_per_page' => -1,
+    'posts_per_page' => 6,
     'post_status'    => 'publish',
     'meta_query'     => [
         [
@@ -33,21 +33,7 @@ $query = new WP_Query($args);
 
                         $query->the_post();
 
-                ?>
-
-                        <div class="col">
-                            <a href="<?= get_the_permalink() ?>" class="lawyers__item">
-                                <div class="lawyers__img">
-                                    <img src="<?= get_the_post_thumbnail_url(); ?>" alt="" class="img img--cover">
-                                </div>
-                                <div class="lawyers__name">
-                                    <?= get_the_title(); ?>
-                                </div>
-                            </a>
-                        </div>
-
-                <?php
-
+                        get_template_part('template-parts/index/content', get_post_type());
                     }
                 }
 
@@ -56,14 +42,10 @@ $query = new WP_Query($args);
                 ?>
 
             </div>
+        </div>
 
-            <div class="show-more">
-                <button class="show-more__btn" type="button">Показать больше</button>
-            </div>
-
-            <?php
-
-            ?>
-
-
+        <div class="show-more">
+            <button class="show-more__btn" type="button" data-ajax="true" data-offset="6" data-posttype="lawyers" data-query='<?= serialize($args); ?>'>Показать больше</button>
+        </div>
+    </div>
 </section>

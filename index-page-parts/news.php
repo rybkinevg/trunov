@@ -49,13 +49,13 @@ $query = new WP_Query($args);
             ?>
 
                     <div class="slider__item">
-                        <a href="<?= get_the_permalink(); ?>" class="news__item">
+                        <div class="news__item">
                             <div class="news__img">
                                 <?= trunov_get_thumbnail(); ?>
                             </div>
                             <span class="news__date"><?= get_the_date('j F Y'); ?></span>
                             <h3 class="news__title">
-                                <?= get_the_title(); ?>
+                                <a href="<?= get_the_permalink(); ?>"><?= get_the_title(); ?></a>
                             </h3>
 
                             <?php
@@ -74,7 +74,7 @@ $query = new WP_Query($args);
 
                             ?>
 
-                        </a>
+                        </div>
                     </div>
 
             <?php

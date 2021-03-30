@@ -231,7 +231,7 @@ add_filter('pre_get_posts', 'change_lawyers_order');
 
 function change_lawyers_order($query)
 {
-    if (is_post_type_archive('lawyers')) {
+    if (is_post_type_archive('lawyers') && $query->is_main_query()) {
 
         $query->set(
             'meta_query',
